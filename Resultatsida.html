@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="book tire change" />
+		<meta name="keywords" content="tire, car, mechanic" />
+
+		<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+
+		<!-- CSS Reset -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+		/>
+
+		<!-- Ikoner till footer -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+			integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="styles.css" />
+		<script src="script.js" defer></script>
+		<title>DÄCKAD</title>
+	</head>
+
+	<header>
+		<div class="logo-container">
+			<img src="/images/dack4.png" alt="DÄCKAD Logga" class="logo" id="logo" />
+		</div>
+		<nav class="navbar">
+			<div class="dropdown">
+				<span class="dropbtn" tabindex="0">&#9776;</span>
+				<div class="dropdown-content">
+					<a href="" tabindex="0"
+						><i class="fa-solid fa-earth-europe"></i>Change to english</a
+					>
+					<a href="login.html" tabindex="0"
+						><i class="fa-solid fa-wrench"></i>Logga in som verkstad</a
+					>
+					<a href="" tabindex="0"
+						><i class="fa-solid fa-circle-half-stroke"></i>Ljust/mörkt tema</a
+					>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<body>
+		<main>
+			<section class="top-section">
+				<div class="timeline-row">
+					<div class="timeline-content">
+						<a href="index.html">
+							<p>Startsida</p>
+							<i class="fa-solid fa-car"></i>
+						</a>
+					</div>
+
+					<div class="timeline-content">
+						<i class="fa-solid fa-arrow-right"></i>
+					</div>
+
+					<div class="timeline-content">
+						<p>Verkstad</p>
+						<i class="fa-solid fa-calendar-days"></i>
+					</div>
+
+					<div class="timeline-content">
+						<i class="fa-solid fa-arrow-right"></i>
+					</div>
+
+					<div class="timeline-content">
+						<p>Betalning</p>
+						<i class="fa-solid fa-cart-shopping"></i>
+					</div>
+
+					<div class="timeline-content">
+						<i class="fa-solid fa-arrow-right"></i>
+					</div>
+
+					<div class="timeline-content">
+						<p>Bekräftelse</p>
+						<i class="fa-solid fa-face-laugh"></i>
+					</div>
+				</div>
+				<div class="timeline-bar">
+					<div class="timeline-fill"></div>
+				</div>
+
+				<h1>Välj Verkstad!</h1>
+
+				<p class="info-timeline">
+					Här nedan finner du alla verkstäder i närheten! Du kan sortera listan
+					efter pris eller avstånd.
+				</p>
+			</section>
+
+			<section class="cards-section">
+				<!-- <p class="cards-order"> -->
+				<div class="filtering">
+					<button type="" class="filter-icon">
+						<p class="Sorteringsval">Avstånd</p>
+						<i class="fa-solid fa-arrow-down-short-wide"></i>
+					</button>
+				</div>
+
+				<!--   sortera -->
+				<!--   <img src="sort-icon.png" alt="Ikon" /> -->
+				<!-- </p> -->
+
+				<section class="stationListWrapper">
+					<div id="stationList">
+						<!-- Alla kort hamnar här -->
+					</div>
+					<button id="showMoreBtn">Visa fler resultat</button>
+				</section>
+
+				<!-- 
+				<div class="card">
+					<img src="workshop1.jpg" alt="Bild på Verkstad" />
+					<div class="card-content">
+						<h3>Verkstad 1</h3>
+						<p>Bilgatan 3</p>
+						<div class="info-row">
+							<p>Avstånd 2km</p>
+							<p class="price">Pris: 500 kr</p>
+						</div>
+					</div>
+					<a href="#book" class="book-button">Välj</a>
+				</div> 
+        -->
+			</section>
+
+			<section>
+				<dialog class="box-green dialog" id="times-modal">
+					<div class="modal-card" method="dialog">
+						<button id="close-modal-button" class="close-button">
+							<i class="fa-solid fa-xmark center"></i>
+						</button>
+						<div class="station-section">
+							<div class="modal-info-wrapper">
+								<h3 id="modal-station-name">-</h3>
+								<img id="modal-station-image" src="" alt="" />
+								<i id="modal-station-address">-</i>
+								<div class="distance-price-wrapper">
+									<p>
+										<i
+											class="fa-solid fa-location-crosshairs color-primary"
+										></i>
+										<span
+											id="modal-station-distance"
+											class="color-accent"
+										></span>
+									</p>
+									<p>
+										<i class="fa-solid fa-coins color-primary"></i>
+										<span id="modal-station-price" class="color-accent">-</span>
+									</p>
+								</div>
+							</div>
+							<hr />
+							<p id="modal-station-description">
+								Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta
+								eveniet illum repellendus, temporibus recusandae doloribus modi
+								quibusdam praesentium repudiandae atque.
+							</p>
+						</div>
+						<div class="times-section">
+							<div class="date-wrapper">
+								<label for="date"><h4>Välj datum:</h4></label>
+								<input type="date" name="date" id="date" required />
+							</div>
+							<hr />
+							<form id="time-form">
+								<fieldset>
+									<legend class="">
+										<h4 class="times-legend">Välj en ledig tid:</h4>
+									</legend>
+									<div class="times-grid">
+										<div class="time-slot">
+											<input
+												type="radio"
+												id="time1"
+												name="time"
+												value="10:00"
+												class="time-input"
+											/>
+											<label for="time1" class="time-circle">10:00</label>
+										</div>
+										<div class="time-slot">
+											<input
+												type="radio"
+												id="time2"
+												name="time"
+												value="10:30"
+												class="time-input"
+											/>
+											<label for="time2" class="time-circle">10:30</label>
+										</div>
+										<div class="time-slot">
+											<input
+												type="radio"
+												id="time3"
+												name="time"
+												value="11:00"
+												class="time-input"
+											/>
+											<label for="time3" class="time-circle">11:00</label>
+										</div>
+										<div class="time-slot">
+											<input
+												type="radio"
+												id="time4"
+												name="time"
+												value="11:30"
+												class="time-input"
+											/>
+											<label for="time4" class="time-circle">11:30</label>
+										</div>
+										<div class="time-slot">
+											<input
+												type="radio"
+												id="time5"
+												name="time"
+												value="12:00"
+												class="time-input"
+											/>
+											<label for="time5" class="time-circle">12:00</label>
+										</div>
+										<div class="time-slot">
+											<input
+												type="radio"
+												id="time6"
+												name="time"
+												value="12:30"
+												class="time-input"
+											/>
+											<label for="time6" class="time-circle">12:30</label>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+							<i id="requiredInfoText" class="color-primary"
+								>Välj både datum och tid för att gå vidare</i
+							>
+						</div>
+						<button
+							type="submit"
+							id="time-btn"
+							class="time-btn btn-primary disabled"
+							form="time-form"
+							disabled
+						>
+							Bekräfta
+						</button>
+					</div>
+				</dialog>
+			</section>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<div class="footer-contact">
+					<h5>Kontakta oss</h5>
+					<ul>
+						<li>Adressgatan 12</li>
+						<li>123 45 Bilan</li>
+						<li>deackad@mail.com</li>
+						<li>070-123 45 67</li>
+					</ul>
+				</div>
+				<div class="footer-info">
+					<h5>Bra att veta</h5>
+					<ul>
+						<li><a href="/login.html">För dig som har en verkstad</a></li>
+						<li><a href="#">För dig som privatkund</a></li>
+						<li><a href="#">Hur vi behandlar dina personuppgifter</a></li>
+						<li><a href="#">Använd ljust läge</a></li>
+					</ul>
+				</div>
+				<div class="footer-socials">
+					<h5>Följ oss på sociala medier</h5>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

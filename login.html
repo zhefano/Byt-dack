@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="book tire change" />
+		<meta name="keywords" content="tire, car, mechanic" />
+
+		<!-- FONT AWESOME -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+			integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<!-- CSS Reset -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+		/>
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="styles.css" />
+		<!-- JavaScript -->
+		<script src="script.js" defer></script>
+
+		<title>DÄCKAD</title>
+		<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+	</head>
+
+	<header>
+		<div class="logo-container">
+			<img src="/images/dack4.png" alt="DÄCKAD Logga" class="logo" id="logo" />
+		</div>
+		<nav class="navbar">
+			<div class="dropdown">
+				<span class="dropbtn" tabindex="0">&#9776;</span>
+				<div class="dropdown-content">
+					<a href="" tabindex="0"
+						><i class="fa-solid fa-earth-europe"></i>Change to english</a
+					>
+					<a href="login.html" tabindex="0"
+						><i class="fa-solid fa-wrench"></i>Logga in som verkstad</a
+					>
+					<a href="" tabindex="0"
+						><i class="fa-solid fa-circle-half-stroke"></i>Ljust/mörkt tema</a
+					>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<body>
+		<h1>Logga in som Verkstad</h1>
+		<section class="box-green">
+			<form id="station-login">
+				<label for="username">Användarnamn:</label>
+				<input
+					type="text"
+					id="username"
+					name="username"
+					placeholder="Ange ditt användarnamn"
+					required
+				/>
+
+				<label for="password">Lösenord:</label>
+				<input
+					type="password"
+					id="password"
+					name="password"
+					placeholder="Ange ditt lösenord"
+					required
+				/>
+
+				<button class="btn-primary disabled" type="submit" disabled>Logga in</button>
+				<button type="button" id="backButton">Tillbaka</button>
+
+				<p><a href="#">Glömt lösenordet?</a></p>
+			</form>
+
+			<p>Har du ingen användare? <a href="#">Skapa en ny användare</a></p>
+		</section>
+		<footer>
+			<div class="footer-container">
+				<div class="footer-contact">
+					<h5>Kontakta oss</h5>
+					<ul>
+						<li>Adressgatan 12</li>
+						<li>123 45 Bilan</li>
+						<li>deackad@mail.com</li>
+						<li>070-123 45 67</li>
+					</ul>
+				</div>
+				<div class="footer-info">
+					<h5>Bra att veta</h5>
+					<ul>
+						<li><a href="/login.html">För dig som har en verkstad</a></li>
+						<li><a href="#">För dig som privatkund</a></li>
+						<li><a href="#">Hur vi behandlar dina personuppgifter</a></li>
+						<li><a href="#">Använd ljust läge</a></li>
+					</ul>
+				</div>
+				<div class="footer-socials">
+					<h5>Följ oss på sociala medier</h5>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

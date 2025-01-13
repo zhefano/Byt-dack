@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="book tire change" />
+		<meta name="keywords" content="tire, car, mechanic" />
+
+		<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+
+		<!-- CSS Reset -->
+		<!-- <link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+		/> -->
+		<!-- Skeleton CSS | Kanske använda? -->
+		<!-- <link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/skeleton-framework/1.0.8/skeleton.min.css"
+			integrity="sha512-59g4XPEYGXbswPgqfPgw4Avpy6023o/TarMIUnZEIdnB6Ls7/4oGAT28HGcAP2uqpo8BmI6GOEzy+XUsZEYK+Q=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/> -->
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="styles.css" />
+		<!-- FONT AWESOME -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+			integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<!-- JavaScript -->
+		<script src="script.js" defer></script>
+		<title>DÄCKAD</title>
+	</head>
+
+	<body>
+		<header>
+			<div class="logo-container">
+				<img
+					src="/images/dack4.png"
+					alt="DÄCKAD Logga"
+					class="logo"
+					id="logo"
+				/>
+			</div>
+			<nav class="navbar">
+				<div class="dropdown">
+					<span class="dropbtn" tabindex="0">&#9776;</span>
+					<div class="dropdown-content">
+						<a href="" tabindex="0"
+							><i class="fa-solid fa-earth-europe"></i>Change to english</a
+						>
+						<a href="login.html" tabindex="0"
+							><i class="fa-solid fa-wrench"></i>Logga in som verkstad</a
+						>
+						<a href="" tabindex="0"
+							><i class="fa-solid fa-circle-half-stroke"></i>Ljust/mörkt tema</a
+						>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+		<main>
+			<div class="timeline-row">
+				<div class="timeline-content">
+					<p>Startsida</p>
+					<i class="fa-solid fa-car"></i>
+				</div>
+
+				<div class="timeline-content">
+					<i class="fa-solid fa-arrow-right"></i>
+				</div>
+
+				<div class="timeline-content">
+					<p>verkstad</p>
+					<i class="fa-solid fa-calendar-days"></i>
+				</div>
+
+				<div class="timeline-content">
+					<i class="fa-solid fa-arrow-right"></i>
+				</div>
+
+				<div class="timeline-content">
+					<p>Betalning</p>
+					<i class="fa-solid fa-cart-shopping"></i>
+				</div>
+
+				<div class="timeline-content">
+					<i class="fa-solid fa-arrow-right"></i>
+				</div>
+
+				<div class="timeline-content">
+					<p>Bekräftelse</p>
+					<i class="fa-solid fa-face-laugh"></i>
+				</div>
+			</div>
+			<div class="timeline-bar">
+				<div class="timeline-fill"></div>
+			</div>
+			<h1>Nu är din tid bokad!</h1>
+			<section class="box-green">
+				<table>
+					<thead>
+						<tr>
+							<h3 class="table-header color-primary">Din bokning:</h3>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th>Verkstad:</th>
+							<td id="workshop-name">Jonas Bilmeck</td>
+						</tr>
+						<tr>
+							<th>Adress:</th>
+							<td id="workshop-address">Bilgatan 5</td>
+						</tr>
+						<tr>
+							<th>Dag:</th>
+							<td id="selected-date">Onsdag, 25 SEPTEMBER</td>
+						</tr>
+						<tr>
+							<th>Tid:</th>
+							<td id="selected-time">Klockan 10:30</td>
+						</tr>
+						<tr>
+							<th>Betalning:</th>
+							<td>På plats</td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+			<p>Vi har skickat en bekräftelse till din mail</p>
+			<h3>Tack för att du valde oss!</h3>
+			<p>
+				Du kan nu stänga detta fönster. <br />
+				Klicka <a href="index.html">HÄR</a> för att komma till startsidan
+			</p>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<div class="footer-contact">
+					<h5>Kontakta oss</h5>
+					<ul>
+						<li>Adressgatan 12</li>
+						<li>123 45 Bilan</li>
+						<li>deackad@mail.com</li>
+						<li>070-123 45 67</li>
+					</ul>
+				</div>
+				<div class="footer-info">
+					<h5>Bra att veta</h5>
+					<ul>
+						<li><a href="/login.html">För dig som har en verkstad</a></li>
+						<li><a href="#">För dig som privatkund</a></li>
+						<li><a href="#">Hur vi behandlar dina personuppgifter</a></li>
+						<li><a href="#">Använd ljust läge</a></li>
+					</ul>
+				</div>
+				<div class="footer-socials">
+					<h5>Följ oss på sociala medier</h5>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>

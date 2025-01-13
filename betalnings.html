@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="sv">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content="book tire change" />
+		<meta name="keywords" content="tire, car, mechanic" />
+
+		<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+		<title>Betalningsalternativ</title>
+
+		<!-- CSS Reset -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+		/>
+
+		<!-- Ikoner till footer -->
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+			integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		/>
+		<!--commit test -->
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="styles.css" />
+		<script src="script.js" defer></script>
+		<title>DÄCKAD</title>
+	</head>
+	<body>
+		<!-- Header med logotyp -->
+		<header>
+			<div class="logo-container">
+				<img
+					src="/images/dack4.png"
+					alt="DÄCKAD Logga"
+					class="logo"
+					id="logo"
+				/>
+			</div>
+			<nav class="navbar">
+				<div class="dropdown">
+					<span class="dropbtn" tabindex="0">&#9776;</span>
+					<div class="dropdown-content">
+						<a href="" tabindex="0"
+							><i class="fa-solid fa-earth-europe"></i>Change to english</a
+						>
+						<a href="login.html" tabindex="0"
+							><i class="fa-solid fa-wrench"></i>Logga in som verkstad</a
+						>
+						<a href="" tabindex="0"
+							><i class="fa-solid fa-circle-half-stroke"></i>Ljust/mörkt tema</a
+						>
+					</div>
+				</div>
+			</nav>
+		</header>
+		<main>
+			<div class="timeline-row">
+				<div class="timeline-content">
+					<a href="index.html">
+						<p>Startsida</p>
+						<i class="fa-solid fa-car"></i>
+					</a>
+				</div>
+
+				<div class="timeline-content">
+					<i class="fa-solid fa-arrow-right"></i>
+				</div>
+
+				<div class="timeline-content">
+					<a href="Resultatsida.html">
+						<p>Verkstad</p>
+						<i class="fa-solid fa-calendar-days"></i>
+					</a>
+				</div>
+
+				<div class="timeline-content">
+					<i class="fa-solid fa-arrow-right"></i>
+				</div>
+
+				<div class="timeline-content">
+					<p>Betalning</p>
+					<i class="fa-solid fa-cart-shopping"></i>
+				</div>
+
+				<div class="timeline-content">
+					<i class="fa-solid fa-arrow-right"></i>
+				</div>
+
+				<div class="timeline-content">
+					<p>Bekräftelse</p>
+					<i class="fa-solid fa-face-laugh"></i>
+				</div>
+			</div>
+
+			<div class="timeline-bar">
+				<div class="timeline-fill"></div>
+			</div>
+			<!-- Bokningsinformation -->
+			<section class="booking-info">
+				<h1>Bekräfta bokning</h1>
+				<p>
+					<b class="color-primary">Nästan klart!</b> <br />
+					Nu behöver vi bara veta dina kontaktuppgifter och hur du vill betala
+				</p>
+
+				<div class="box-green">
+					<form id="bookingForm">
+						<h2>Kontaktuppgifter:</h2>
+						<label for="workshop">Namn:</label>
+						<input
+							type="text"
+							id="workshop"
+							name="workshop"
+							placeholder="Namn"
+							required
+						/>
+						<label for="address">E-post:</label>
+						<input
+							type="text"
+							id="address"
+							name="address"
+							placeholder="Adress"
+							required
+						/>
+						<label for="Telefon">Telefon:</label>
+						<input
+							type="text"
+							id="Telefon"
+							name="Telefon"
+							placeholder="Telefon"
+							required
+						/>
+
+						<fieldset>
+							<legend>
+								<h2>Hur vill du betala?</h2>
+							</legend>
+
+							<div class="payment-options">
+								<input type="radio" id="payOnSite" name="payment" checked />
+								<label for="payOnSite">På plats</label>
+								<i class="fa-solid fa-location-dot"></i>
+								<input
+									disabled
+									class="disabled"
+									type="radio"
+									id="payByCard"
+									name="payment"
+								/>
+								<label class="text-line-through" for="payByCard"
+									>Med kort</label
+								>
+								<i class="fa-regular fa-credit-card"></i>
+								<input
+									disabled
+									class="disabled"
+									type="radio"
+									id="payBySwish"
+									name="payment"
+								/>
+								<label class="text-line-through" for="payBySwish"
+									>Med Swish</label
+								>
+								<i class="fa-solid fa-mobile-screen-button "></i>
+							</div>
+						</fieldset>
+						<button							
+							class="btn-accent disabled"
+							id="confirmButton"
+							type="button"
+							form="bookingForm"
+						>
+							Bekräfta bokning
+						</button>
+						<button class="btn-primary" type="button" id="backButton">
+							Tillbaka
+						</button>
+					</form>
+				</div>
+			</section>
+		</main>
+		<footer>
+			<div class="footer-container">
+				<div class="footer-contact">
+					<h5>Kontakta oss</h5>
+					<ul>
+						<li>Adressgatan 12</li>
+						<li>123 45 Bilan</li>
+						<li>deackad@mail.com</li>
+						<li>070-123 45 67</li>
+					</ul>
+				</div>
+				<div class="footer-info">
+					<h5>Bra att veta</h5>
+					<ul>
+						<li><a href="/login.html">För dig som har en verkstad</a></li>
+						<li><a href="#">För dig som privatkund</a></li>
+						<li><a href="#">Hur vi behandlar dina personuppgifter</a></li>
+						<li><a href="#">Använd ljust läge</a></li>
+					</ul>
+				</div>
+				<div class="footer-socials">
+					<h5>Följ oss på sociala medier</h5>
+					<div class="social-links">
+						<a href="#"><i class="fab fa-facebook-f"></i></a>
+						<a href="#"><i class="fab fa-twitter"></i></a>
+						<a href="#"><i class="fab fa-instagram"></i></a>
+						<a href="#"><i class="fab fa-linkedin-in"></i></a>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</body>
+</html>
