@@ -56,30 +56,39 @@
         <!-- Hero Section -->
         <section class="search-section">
             <div class="container">
-                <h1>Dags att byta däck?</h1>
-                <p class="text-lg mb-8">Vi hittar den bästa verkstaden åt dig - jämför priser och boka direkt</p>
-                
-                <form class="search-form" id="search-form" role="search">
-                    <button type="button" class="location-btn" id="location-btn">
-                        <i class="icon-location" aria-hidden="true"></i>
-                        Använd min plats
-                    </button>
+                <div class="hero-content">
+                    <h1 class="hero-title">Dags att byta däck?</h1>
+                    <p class="hero-subtitle">Vi hittar den bästa verkstaden åt dig - jämför priser och boka direkt</p>
                     
-                    <div class="form-group">
-                        <label for="search-input" class="sr-only">Sök efter ort eller adress</label>
-                        <input 
-                            type="search" 
-                            id="search-input" 
-                            class="form-input" 
-                            placeholder="Skriv in en ort eller adress"
-                            autocomplete="address-line1"
-                        >
+                    <div class="search-container">
+                        <form class="search-form" id="search-form" role="search">
+                            <div class="search-actions">
+                                <button type="button" class="location-btn" id="location-btn">
+                                    <i class="icon-location" aria-hidden="true"></i>
+                                    Använd min plats
+                                </button>
+                                
+                                <div class="search-divider">
+                                    <span>eller</span>
+                                </div>
+                                
+                                <div class="search-input-group">
+                                    <label for="search-input" class="sr-only">Sök efter ort eller adress</label>
+                                    <input 
+                                        type="search" 
+                                        id="search-input" 
+                                        class="search-input" 
+                                        placeholder="Skriv in en ort eller adress"
+                                        autocomplete="address-line1"
+                                    >
+                                    <button type="submit" class="search-btn">
+                                        Sök verkstäder
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        Sök verkstäder
-                    </button>
-                </form>
+                </div>
             </div>
         </section>
 
