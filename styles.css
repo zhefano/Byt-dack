@@ -33,11 +33,13 @@
   --text-2xl: 1.5rem;
   --text-3xl: 1.875rem;
   --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
   
   /* Border Radius */
   --radius-sm: 0.25rem;
   --radius: 0.5rem;
   --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
   
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -198,20 +200,55 @@ p {
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
 }
 
-/* Search Section - Simple and Clean */
+/* Hero Section */
 .search-section {
-  text-align: center;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
   padding: var(--space-16) 0;
-  background: linear-gradient(135deg, var(--surface) 0%, white 100%);
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
 }
 
-.search-options {
-  max-width: 600px;
+.hero-content {
+  text-align: center;
+  max-width: 800px;
   margin: 0 auto;
+}
+
+.hero-title {
+  font-size: var(--text-5xl);
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--space-6);
+  line-height: 1.1;
+}
+
+.hero-subtitle {
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-12);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.search-container {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+}
+
+.search-form {
+  width: 100%;
+}
+
+.search-actions {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: var(--space-6);
+  align-items: center;
 }
 
 .location-btn {
@@ -223,7 +260,7 @@ p {
   background-color: var(--primary);
   color: white;
   border: none;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   font-size: var(--text-lg);
   font-weight: 500;
   cursor: pointer;
@@ -233,54 +270,52 @@ p {
 
 .location-btn:hover {
   background-color: var(--primary-hover);
+  transform: translateY(-1px);
 }
 
-.divider {
+.search-divider {
+  position: relative;
+  width: 100%;
+  text-align: center;
   color: var(--text-secondary);
   font-size: var(--text-sm);
-  position: relative;
-  padding: 0 var(--space-4);
 }
 
-.divider::before,
-.divider::after {
+.search-divider::before {
   content: '';
   position: absolute;
   top: 50%;
-  width: 60px;
+  left: 0;
+  right: 0;
   height: 1px;
   background-color: var(--border);
+  z-index: 1;
 }
 
-.divider::before {
-  right: 100%;
-  margin-right: var(--space-4);
-}
-
-.divider::after {
-  left: 100%;
-  margin-left: var(--space-4);
-}
-
-.search-form {
-  width: 100%;
-}
-
-.search-group {
-  display: flex;
-  max-width: 500px;
-  margin: 0 auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
+.search-divider span {
   background: white;
+  padding: 0 var(--space-4);
+  position: relative;
+  z-index: 2;
+}
+
+.search-input-group {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+  border: 1px solid var(--border);
 }
 
 .search-input {
   flex: 1;
-  padding: var(--space-4) var(--space-6);
   border: none;
+  background: transparent;
+  padding: var(--space-3) var(--space-4);
   font-size: var(--text-base);
+  color: var(--text);
   outline: none;
 }
 
@@ -289,14 +324,16 @@ p {
 }
 
 .search-btn {
-  padding: var(--space-4) var(--space-6);
   background-color: var(--primary);
   color: white;
   border: none;
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-6);
   font-size: var(--text-base);
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap;
 }
 
 .search-btn:hover {
@@ -703,15 +740,23 @@ p {
 
 /* Responsive Design */
 @media (min-width: 640px) {
-  .search-options {
+  .hero-title {
+    font-size: var(--text-5xl);
+  }
+  
+  .search-actions {
     flex-direction: row;
     align-items: center;
     gap: var(--space-8);
   }
   
-  .divider::before,
-  .divider::after {
-    width: 40px;
+  .search-divider {
+    width: auto;
+    min-width: 60px;
+  }
+  
+  .search-divider::before {
+    display: none;
   }
   
   .footer-content {
@@ -739,17 +784,30 @@ p {
 }
 
 @media (max-width: 640px) {
-  .search-group {
+  .hero-title {
+    font-size: var(--text-4xl);
+  }
+  
+  .search-container {
+    padding: var(--space-6);
+  }
+  
+  .search-actions {
+    gap: var(--space-4);
+  }
+  
+  .location-btn {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .search-input-group {
     flex-direction: column;
+    gap: var(--space-3);
   }
   
   .search-btn {
-    border-top: 1px solid var(--border);
-  }
-  
-  .divider::before,
-  .divider::after {
-    display: none;
+    width: 100%;
   }
   
   .timeline {
