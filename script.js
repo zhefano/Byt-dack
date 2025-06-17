@@ -1,4 +1,4 @@
-// DÄCKAD - Revolutionary Performance-First JavaScript
+// DÄCKAD - Dribbble-Inspired Revolutionary JavaScript
 
 // Configuration
 const CONFIG = {
@@ -61,7 +61,7 @@ const utils = {
         return date.toLocaleDateString('sv-SE', options);
     },
 
-    // Show loading state
+    // Show loading state with Dribbble-style animation
     showLoading(element) {
         if (element) {
             element.classList.add('loading');
@@ -256,6 +256,38 @@ const ui = {
         }
     },
 
+    // Dribbble-style animations
+    initDribbbleAnimations() {
+        // Stagger word animations
+        const words = document.querySelectorAll('.word');
+        words.forEach((word, index) => {
+            word.style.animationDelay = `${0.2 + (index * 0.2)}s`;
+        });
+
+        // Floating elements interaction
+        const floatingElements = document.querySelectorAll('.float-tire, .geometric-shape');
+        floatingElements.forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.animationPlayState = 'paused';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                element.style.animationPlayState = 'running';
+            });
+        });
+
+        // Parallax effect for floating elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallax = scrolled * 0.5;
+            
+            floatingElements.forEach((element, index) => {
+                const speed = 0.2 + (index * 0.1);
+                element.style.transform = `translateY(${parallax * speed}px)`;
+            });
+        });
+    },
+
     // Station Cards
     createStationCard(station, userLocation) {
         const distance = userLocation ? 
@@ -334,11 +366,14 @@ const ui = {
 
 // Page Controllers
 const pageControllers = {
-    // Home Page - Revolutionary Edition
+    // Home Page - Dribbble Edition
     initHomePage() {
         const locationBlast = document.getElementById('location-blast');
         const locationInput = document.getElementById('location-input');
         const goButton = document.getElementById('go-button');
+
+        // Initialize Dribbble animations
+        ui.initDribbbleAnimations();
 
         // Revolutionary location blast button
         if (locationBlast) {
@@ -349,8 +384,13 @@ const pageControllers = {
                     const location = await locationService.getCurrentPosition();
                     utils.storage.set(CONFIG.STORAGE_KEYS.USER_LOCATION, location);
                     
-                    // Add explosive feedback
-                    locationBlast.style.transform = 'scale(1.1)';
+                    // Dribbble-style success feedback
+                    locationBlast.style.transform = 'scale(1.05)';
+                    const btnBg = locationBlast.querySelector('.btn-bg');
+                    if (btnBg) {
+                        btnBg.style.left = '0';
+                    }
+                    
                     setTimeout(() => {
                         locationBlast.style.transform = '';
                     }, 200);
@@ -366,21 +406,24 @@ const pageControllers = {
                         locationInput.value = address;
                     }
                     
-                    // Explosive redirect
+                    // Smooth redirect
                     setTimeout(() => {
                         window.location.href = '/Resultatsida.html';
-                    }, 500);
+                    }, 800);
                 } catch (error) {
                     console.error('Location error:', error);
-                    // Show revolutionary error message
-                    locationBlast.style.background = 'linear-gradient(135deg, #ff3333 0%, #ff6666 100%)';
-                    locationBlast.querySelector('.blast-main').textContent = 'PLATS EJ TILLGÄNGLIG';
-                    locationBlast.querySelector('.blast-sub').textContent = 'försök manuellt';
+                    // Dribbble-style error feedback
+                    locationBlast.style.borderColor = '#ef4444';
+                    const btnMain = locationBlast.querySelector('.btn-main');
+                    if (btnMain) {
+                        btnMain.textContent = 'PLATS EJ TILLGÄNGLIG';
+                    }
                     
                     setTimeout(() => {
-                        locationBlast.style.background = '';
-                        locationBlast.querySelector('.blast-main').textContent = 'HITTA VERKSTÄDER';
-                        locationBlast.querySelector('.blast-sub').textContent = 'använd din plats';
+                        locationBlast.style.borderColor = '';
+                        if (btnMain) {
+                            btnMain.textContent = 'HITTA VERKSTÄDER';
+                        }
                     }, 3000);
                 } finally {
                     utils.hideLoading(locationBlast);
@@ -388,14 +431,13 @@ const pageControllers = {
             });
         }
 
-        // Manual search with explosive feedback
+        // Manual search with Dribbble feedback
         if (goButton && locationInput) {
             const handleSearch = () => {
                 const searchValue = locationInput.value.trim();
                 if (searchValue) {
-                    // Explosive button feedback
+                    // Dribbble-style button feedback
                     goButton.style.transform = 'scale(1.1)';
-                    goButton.querySelector('.button-spark').style.left = '100%';
                     
                     setTimeout(() => {
                         goButton.style.transform = '';
@@ -412,19 +454,25 @@ const pageControllers = {
                 }
             });
 
-            // Revolutionary input feedback
+            // Dribbble-style input feedback
             locationInput.addEventListener('focus', () => {
-                locationInput.parentElement.style.transform = 'scale(1.02)';
+                const container = locationInput.closest('.search-container');
+                if (container) {
+                    container.style.transform = 'scale(1.02)';
+                }
             });
 
             locationInput.addEventListener('blur', () => {
-                locationInput.parentElement.style.transform = '';
+                const container = locationInput.closest('.search-container');
+                if (container) {
+                    container.style.transform = '';
+                }
             });
         }
 
-        // Add revolutionary tire animation interaction
-        const tires = document.querySelectorAll('.tire');
-        tires.forEach((tire, index) => {
+        // Add interactive floating elements
+        const floatTires = document.querySelectorAll('.float-tire');
+        floatTires.forEach((tire, index) => {
             tire.addEventListener('click', () => {
                 tire.style.animationDuration = '0.5s';
                 setTimeout(() => {
@@ -752,7 +800,7 @@ const pageControllers = {
     }
 };
 
-// Main Application - Revolutionary Edition
+// Main Application - Dribbble Edition
 class DaeckadApp {
     constructor() {
         this.currentPage = this.getCurrentPage();
@@ -792,11 +840,23 @@ class DaeckadApp {
             console.error('Error initializing page:', error);
         }
 
-        // Initialize revolutionary features
-        this.initRevolutionaryFeatures();
+        // Initialize Dribbble features
+        this.initDribbbleFeatures();
     }
 
-    initRevolutionaryFeatures() {
+    initDribbbleFeatures() {
+        // Smooth scroll behavior
+        document.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href^="#"]');
+            if (link) {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+
         // Keyboard navigation improvements
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -809,21 +869,21 @@ class DaeckadApp {
             }
         });
 
-        // Revolutionary performance monitoring
+        // Performance monitoring
         if ('performance' in window) {
             window.addEventListener('load', () => {
                 const loadTime = performance.now();
-                console.log(`🚀 DÄCKAD loaded in ${loadTime.toFixed(2)}ms - REVOLUTIONARY SPEED!`);
+                console.log(`🚀 DÄCKAD Dribbble Edition loaded in ${loadTime.toFixed(2)}ms`);
             });
         }
 
-        // Add revolutionary easter eggs
+        // Add Dribbble-style easter eggs
         let clickCount = 0;
         document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('tire')) {
+            if (e.target.classList.contains('float-tire')) {
                 clickCount++;
                 if (clickCount === 5) {
-                    console.log('🔥 REVOLUTIONARY TIRE MASTER DISCOVERED! 🔥');
+                    console.log('🎨 DRIBBBLE MASTER DISCOVERED! 🎨');
                     clickCount = 0;
                 }
             }
@@ -831,7 +891,7 @@ class DaeckadApp {
     }
 }
 
-// Initialize revolutionary app when DOM is ready
+// Initialize Dribbble app when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => new DaeckadApp());
 } else {

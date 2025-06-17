@@ -53,130 +53,176 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Revolutionary Hero Section -->
-        <section class="hero-revolution">
-            <div class="tire-animation">
-                <div class="tire tire-1"></div>
-                <div class="tire tire-2"></div>
-                <div class="tire tire-3"></div>
-                <div class="tire tire-4"></div>
+        <!-- Revolutionary Hero Section - Dribbble Inspired -->
+        <section class="hero-dribbble">
+            <!-- Floating Elements -->
+            <div class="floating-elements">
+                <div class="float-tire float-1">
+                    <div class="tire-inner"></div>
+                </div>
+                <div class="float-tire float-2">
+                    <div class="tire-inner"></div>
+                </div>
+                <div class="float-tire float-3">
+                    <div class="tire-inner"></div>
+                </div>
+                <div class="geometric-shape shape-1"></div>
+                <div class="geometric-shape shape-2"></div>
+                <div class="geometric-shape shape-3"></div>
             </div>
             
             <div class="container">
-                <div class="hero-blast">
-                    <div class="impact-text">
-                        <h1 class="hero-shout">
-                            <span class="word-1">DÄCK</span>
-                            <span class="word-2">KRIS?</span>
+                <div class="hero-content">
+                    <!-- Main Impact -->
+                    <div class="impact-zone">
+                        <div class="pre-title">
+                            <span class="pre-text">DÄCKBYTE</span>
+                            <div class="pre-line"></div>
+                        </div>
+                        
+                        <h1 class="mega-title">
+                            <span class="title-line line-1">
+                                <span class="word" data-word="SNABBT">SNABBT</span>
+                            </span>
+                            <span class="title-line line-2">
+                                <span class="word" data-word="ENKELT">ENKELT</span>
+                            </span>
+                            <span class="title-line line-3">
+                                <span class="word accent-word" data-word="SMART">SMART</span>
+                            </span>
                         </h1>
-                        <div class="hero-punch">
-                            <span class="punch-line">VI LÖSER DET</span>
-                            <span class="punch-sub">på 2 minuter</span>
+                        
+                        <div class="subtitle-zone">
+                            <p class="hero-subtitle">
+                                Vi kopplar dig till närmaste verkstad på <strong>2 minuter</strong>
+                            </p>
+                            <div class="trust-line">
+                                <span class="trust-item">30+ verkstäder</span>
+                                <span class="trust-divider">•</span>
+                                <span class="trust-item">Från 210kr</span>
+                                <span class="trust-divider">•</span>
+                                <span class="trust-item">Garanterat pris</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="action-zone">
-                        <div class="location-blast" id="location-blast">
-                            <div class="blast-icon">📍</div>
-                            <div class="blast-text">
-                                <span class="blast-main">HITTA VERKSTÄDER</span>
-                                <span class="blast-sub">använd din plats</span>
-                            </div>
-                            <div class="blast-arrow">→</div>
-                        </div>
-                        
-                        <div class="or-divider">
-                            <span>ELLER</span>
-                        </div>
-                        
-                        <div class="manual-zone">
-                            <input 
-                                type="text" 
-                                id="location-input" 
-                                class="location-input" 
-                                placeholder="Skriv din stad..."
-                            >
-                            <button class="go-button" id="go-button">
-                                <span>SÖK</span>
-                                <div class="button-spark"></div>
+                    <!-- Action Center -->
+                    <div class="action-center">
+                        <div class="primary-action">
+                            <button class="location-mega-btn" id="location-blast">
+                                <div class="btn-bg"></div>
+                                <div class="btn-content">
+                                    <div class="btn-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="2" fill="currentColor"/>
+                                            <circle cx="12" cy="9" r="2.5" fill="white"/>
+                                        </svg>
+                                    </div>
+                                    <div class="btn-text">
+                                        <span class="btn-main">HITTA VERKSTÄDER</span>
+                                        <span class="btn-sub">Använd min plats</span>
+                                    </div>
+                                    <div class="btn-arrow">→</div>
+                                </div>
+                                <div class="btn-ripple"></div>
                             </button>
                         </div>
-                    </div>
-                    
-                    <div class="trust-indicators">
-                        <div class="indicator">
-                            <span class="number">30+</span>
-                            <span class="label">VERKSTÄDER</span>
+                        
+                        <div class="divider-section">
+                            <div class="divider-line"></div>
+                            <span class="divider-text">eller</span>
+                            <div class="divider-line"></div>
                         </div>
-                        <div class="indicator">
-                            <span class="number">210kr</span>
-                            <span class="label">FRÅN</span>
-                        </div>
-                        <div class="indicator">
-                            <span class="number">2min</span>
-                            <span class="label">BOKNING</span>
+                        
+                        <div class="manual-search">
+                            <div class="search-container">
+                                <input 
+                                    type="text" 
+                                    id="location-input" 
+                                    class="search-input" 
+                                    placeholder="Ange din stad eller adress..."
+                                >
+                                <button class="search-btn" id="go-button">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div class="hero-bg-pattern"></div>
+            <!-- Background Elements -->
+            <div class="hero-bg">
+                <div class="bg-gradient"></div>
+                <div class="bg-pattern"></div>
+            </div>
         </section>
 
-        <!-- How it Works - Reimagined -->
-        <section class="process-revolution">
+        <!-- Process Section - Dribbble Style -->
+        <section class="process-dribbble">
             <div class="container">
-                <h2 class="process-title">SÅ ENKELT ÄR DET</h2>
+                <div class="section-header">
+                    <div class="section-pre">
+                        <span>PROCESSEN</span>
+                        <div class="pre-line"></div>
+                    </div>
+                    <h2 class="section-title">Så här enkelt är det</h2>
+                    <p class="section-subtitle">Tre steg till nya däck</p>
+                </div>
                 
-                <div class="process-flow">
-                    <div class="flow-step step-1">
-                        <div class="step-visual">
-                            <div class="step-icon">🎯</div>
-                            <div class="step-pulse"></div>
+                <div class="process-grid">
+                    <div class="process-card card-1">
+                        <div class="card-number">01</div>
+                        <div class="card-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="9" r="2.5" stroke="currentColor" stroke-width="2"/>
+                            </svg>
                         </div>
-                        <div class="step-content">
-                            <h3>PEKA</h3>
-                            <p>Din plats</p>
-                        </div>
+                        <h3 class="card-title">Välj plats</h3>
+                        <p class="card-description">Ange din adress eller använd GPS för att hitta verkstäder nära dig</p>
+                        <div class="card-bg"></div>
                     </div>
                     
-                    <div class="flow-arrow">
-                        <div class="arrow-line"></div>
-                        <div class="arrow-head"></div>
+                    <div class="process-card card-2">
+                        <div class="card-number">02</div>
+                        <div class="card-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/>
+                                <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/>
+                                <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="card-title">Boka tid</h3>
+                        <p class="card-description">Jämför priser och välj den verkstad och tid som passar dig bäst</p>
+                        <div class="card-bg"></div>
                     </div>
                     
-                    <div class="flow-step step-2">
-                        <div class="step-visual">
-                            <div class="step-icon">⚡</div>
-                            <div class="step-pulse"></div>
+                    <div class="process-card card-3">
+                        <div class="card-number">03</div>
+                        <div class="card-icon">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2"/>
+                                <polyline points="22,4 12,14.01 9,11.01" stroke="currentColor" stroke-width="2"/>
+                            </svg>
                         </div>
-                        <div class="step-content">
-                            <h3>VÄLJ</h3>
-                            <p>Verkstad & tid</p>
-                        </div>
-                    </div>
-                    
-                    <div class="flow-arrow">
-                        <div class="arrow-line"></div>
-                        <div class="arrow-head"></div>
-                    </div>
-                    
-                    <div class="flow-step step-3">
-                        <div class="step-visual">
-                            <div class="step-icon">🚀</div>
-                            <div class="step-pulse"></div>
-                        </div>
-                        <div class="step-content">
-                            <h3>KLART</h3>
-                            <p>Bekräftat!</p>
-                        </div>
+                        <h3 class="card-title">Klart!</h3>
+                        <p class="card-description">Få bekräftelse direkt och åk till verkstaden vid bokad tid</p>
+                        <div class="card-bg"></div>
                     </div>
                 </div>
                 
                 <div class="process-footer">
-                    <p class="process-promise">
-                        <strong>LÖFTE:</strong> Inga dolda avgifter. Inga krångel. Bara snabba däckbyten.
-                    </p>
+                    <div class="guarantee-badge">
+                        <div class="badge-icon">✓</div>
+                        <div class="badge-text">
+                            <strong>Prisgaranti</strong>
+                            <span>Inga dolda avgifter eller överraskningar</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
