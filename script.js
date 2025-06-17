@@ -1,670 +1,780 @@
-// const apiUrl = "http://localhost:3000/stations"; // json-server URL
-const apiUrl = "https://api.jsonbin.io/v3/b/66fd147ead19ca34f8b16ee2"; // JSONBin URL
-const apiAccessKey =
-	"$2a$10$y4mPQYiiUu74u2sIyOEiWO85nKLstQ8LQ0ZhqDNGMzTofL.vJfCm6"; // JSONBin API key
+// DÄCKAD - Minimalistic Performance-First JavaScript
 
-// ----------GLOBALA VARIABLAR----------
-let currentStationIndex = 0; // Håller räkning på hur många stationer som visas för tillfället.
-const stationsPerPage = 10; // Hur många stationer som visas per sida i "resultat"
-let stations = []; // Innehåller alla hämtade stationer
-let currentSortOrder = "distance";
+// Configuration
+const CONFIG = {
+    API_URL: "https://api.jsonbin.io/v3/b/66fd147ead19ca34f8b16ee2",
+    API_KEY: "$2a$10$y4mPQYiiUu74u2sIyOEiWO85nKLstQ8LQ0ZhqDNGMzTofL.vJfCm6",
+    STATIONS_PER_PAGE: 10,
+    STORAGE_KEYS: {
+        STATIONS: 'daeckad_stations',
+        USER_LOCATION: 'daeckad_user_location',
+        SELECTED_STATION: 'daeckad_selected_station',
+        BOOKING_INFO: 'daeckad_booking_info'
+    }
+};
 
-// --------------------------------------
+// Global State
+const state = {
+    stations: [],
+    currentStationIndex: 0,
+    sortOrder: 'distance',
+    isLoading: false
+};
 
-document.addEventListener("DOMContentLoaded", async function () {
-	await initStations(); // Initierar stationerna. Sparar stationerna i "local storage" och i "stations"
-	const logoBtn = document.getElementById("logo");
-	if (logoBtn) {
-		logoBtn.addEventListener("click", function () {
-			window.location.href = "/index.html"; // Ändra sökvägen till din startsida om det behövs
-		});
-		logo.addEventListener("mouseover", function () {
-			logo.style.cursor = "pointer";
-		});
-	}
-	let dropDownBtn = document.querySelector(".dropbtn");
-	let dropDownContent = document.querySelector(".dropdown-content");
-	if (dropDownBtn) {
-		dropDownBtn.addEventListener("click", () => {
-			showDropDown();			
+// Utility Functions
+const utils = {
+    // Debounce function for performance
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    },
 
-			// Om man klickar utanför försvinner den
-			document.addEventListener("click", (event) => {
-				if (
-					dropDownContent.style.display === "block" &&
-					!dropDownContent.contains(event.target) &&
-					!dropDownBtn.contains(event.target)
-				) {
-					dropDownContent.style.display = "";
-				}
-			});
-		
-		});
-		dropDownBtn.addEventListener("keydown", (event) => {
-			if (event.key === "Enter") {
-				showDropDown();
-			}
-		});
-	}
+    // Calculate distance between two coordinates
+    calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Earth's radius in km
+        const dLat = (lat2 - lat1) * (Math.PI / 180);
+        const dLon = (lon2 - lon1) * (Math.PI / 180);
+        const a = 
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    },
 
-	//Click händelse för "Använd min plats"
-	if (window.location.pathname === "/index.html") {
-		const locationText = document.getElementById("location-text");
-		if (locationText) {
-			locationText.addEventListener("click", async function () {
-				event.preventDefault();
-				console.log("Fetching user location...");
-				try {
-					await userLocation(); // Fetch and store user location
-					console.log("Location fetched successfully.");
-					window.location.assign("/Resultatsida.html"); // <-- flyttar användaren till resultatsida.html direkt
-				} catch (error) {
-					console.error("Error while fetching location:", error);
-				}
-			});
-		}
-	}
+    // Format date for display
+    formatDate(dateString) {
+        const date = new Date(dateString);
+        const options = { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        };
+        return date.toLocaleDateString('sv-SE', options);
+    },
 
-	//Fyller timelinen med olika procent, beroende på vilkden sida användaren är på
+    // Show loading state
+    showLoading(element) {
+        if (element) {
+            element.classList.add('loading');
+            const spinner = element.querySelector('.spinner');
+            if (!spinner) {
+                element.insertAdjacentHTML('afterbegin', '<div class="spinner"></div>');
+            }
+        }
+    },
 
-	const fillElement = document.querySelector(".timeline-fill");
+    // Hide loading state
+    hideLoading(element) {
+        if (element) {
+            element.classList.remove('loading');
+            const spinner = element.querySelector('.spinner');
+            if (spinner) spinner.remove();
+        }
+    },
 
-	if (fillElement) {
-		const currentPage = window.location.pathname.split("/").pop();
+    // Storage helpers
+    storage: {
+        set(key, value) {
+            try {
+                sessionStorage.setItem(key, JSON.stringify(value));
+            } catch (e) {
+                console.warn('Storage not available:', e);
+            }
+        },
+        
+        get(key) {
+            try {
+                const item = sessionStorage.getItem(key);
+                return item ? JSON.parse(item) : null;
+            } catch (e) {
+                console.warn('Storage not available:', e);
+                return null;
+            }
+        },
+        
+        remove(key) {
+            try {
+                sessionStorage.removeItem(key);
+            } catch (e) {
+                console.warn('Storage not available:', e);
+            }
+        }
+    }
+};
 
-		let fillPercentage = 0;
+// API Service
+const apiService = {
+    async fetchStations() {
+        try {
+            const response = await fetch(CONFIG.API_URL, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Access-Key': CONFIG.API_KEY
+                }
+            });
 
-		switch (currentPage) {
-			case "Resultatsida.html":
-				fillPercentage = 37;
-				break;
-			case "betalnings.html":
-				fillPercentage = 66;
-				break;
-			case "confirm.html":
-				fillPercentage = 100;
-				break;
-			default:
-				fillPercentage = 0;
-				break;
-		}
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-		fillElement.style.width = fillPercentage + "%";
-	}
+            const data = await response.json();
+            return data.record.stations;
+        } catch (error) {
+            console.error('Error fetching stations:', error);
+            throw error;
+        }
+    }
+};
 
-	// const nextButton = document.getElementById("next-button");
-	const backButton = document.getElementById("backButton");
-	if (backButton) {
-		backButton.addEventListener("click", () => {
-			event.preventDefault();
-			history.back();
-		});
-	}
-	// if (nextButton) {
-	// 	nextButton.addEventListener("click", () => handleNavigation("next"));
-	// }
+// Location Service
+const locationService = {
+    async getCurrentPosition() {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject(new Error('Geolocation is not supported'));
+                return;
+            }
 
-	if (window.location.pathname === "/Resultatsida.html") {
-		// Ensure user location is fetched before displaying stations
-		if (!sessionStorage.getItem("storedUserLocation")) {
-			console.log("No stored user location found. Fetching location...");
-			await userLocation();
-		}
-		displayMoreStations();
-		const showMoreBtn = document.querySelector("#showMoreBtn");
-		showMoreBtn.addEventListener("click", displayMoreStations);
+            navigator.geolocation.getCurrentPosition(
+                position => resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                }),
+                error => reject(error),
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 300000 // 5 minutes
+                }
+            );
+        });
+    },
 
-		// Sorteringsknapp
-		const sortButton = document.querySelector(".filter-icon");
-		sortButton.addEventListener("click", sortStations);
-	}
-	// -----------BETALSIDAN----------------
-	if (window.location.pathname === "/betalnings.html") {
-		const confirmButton = document.querySelector("#confirmButton");
+    async getAddressFromCoordinates(lat, lng) {
+        try {
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
+            );
+            const data = await response.json();
+            
+            const city = data.address?.city || data.address?.town || data.address?.village || '';
+            const street = data.address?.road || '';
+            
+            return `${city}${street ? ', ' + street : ''}`;
+        } catch (error) {
+            console.error('Error getting address:', error);
+            return null;
+        }
+    }
+};
 
-		// Initially disable the button
-		confirmButton.disabled = true;
+// Station Service
+const stationService = {
+    async initializeStations() {
+        // Check if stations are cached
+        const cachedStations = utils.storage.get(CONFIG.STORAGE_KEYS.STATIONS);
+        
+        if (cachedStations && Array.isArray(cachedStations)) {
+            state.stations = cachedStations;
+            return cachedStations;
+        }
 
-		// Add event listener to check form completion
-		document.addEventListener("input", function () {
-			checkFormCompletion("#bookingForm", "#confirmButton"); // Ensure form completion enables the button
-		});
+        // Fetch from API
+        try {
+            const stations = await apiService.fetchStations();
+            state.stations = stations;
+            utils.storage.set(CONFIG.STORAGE_KEYS.STATIONS, stations);
+            return stations;
+        } catch (error) {
+            console.error('Failed to initialize stations:', error);
+            return [];
+        }
+    },
 
-		// Add click event listener to redirect if form is valid
-		confirmButton.addEventListener("click", (event) => {
-			// Prevent the button from working unless the form is correctly filled
-			if (!confirmButton.disabled) {
-				window.location.assign("/confirm.html");
-			} else {
-				event.preventDefault(); // Prevent the default action if the button is still disabled
-			}
-		});
-	}
+    getStationsWithDistance(userLocation) {
+        if (!userLocation) return state.stations;
 
-	// Kolla om vi är på confirm.html,
-	// och hämtar då sparad data
-	if (window.location.pathname === "/confirm.html") {
-		const orderInfo = JSON.parse(sessionStorage.getItem("currentOrderInfo"));
+        return state.stations.map(station => ({
+            ...station,
+            distance: utils.calculateDistance(
+                userLocation.latitude,
+                userLocation.longitude,
+                station.latitude,
+                station.longitude
+            )
+        }));
+    },
 
-		const selectedStation = JSON.parse(
-			sessionStorage.getItem("selectedStation")
-		);
+    sortStations(stations, sortBy = 'distance') {
+        const sorted = [...stations];
+        
+        if (sortBy === 'distance') {
+            return sorted.sort((a, b) => (a.distance || 0) - (b.distance || 0));
+        } else if (sortBy === 'price') {
+            return sorted.sort((a, b) => a.price - b.price);
+        }
+        
+        return sorted;
+    }
+};
 
-		document.getElementById("workshop-name").textContent = selectedStation.name;
-		document.getElementById("workshop-address").textContent =
-			selectedStation.address;
+// UI Components
+const ui = {
+    // Navigation
+    initNavigation() {
+        const navToggle = document.getElementById('nav-toggle');
+        const navDropdown = document.getElementById('nav-dropdown');
+        
+        if (navToggle && navDropdown) {
+            navToggle.addEventListener('click', () => {
+                navDropdown.classList.toggle('active');
+            });
 
-		document.getElementById("selected-date").textContent = orderInfo.date;
-		document.getElementById("selected-time").textContent = orderInfo.time;
-	}
-});
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!navToggle.contains(e.target) && !navDropdown.contains(e.target)) {
+                    navDropdown.classList.remove('active');
+                }
+            });
+        }
 
-// Initierar stationerna. Sparar stationerna i "local storage" och i "stations"
-async function initStations() {
-	// Check if stations are stored in localStorage
-	const storedStations = localStorage.getItem("stations");
+        // Logo click handler
+        const logo = document.getElementById('logo');
+        if (logo) {
+            logo.addEventListener('click', () => {
+                window.location.href = '/index.html';
+            });
+        }
+    },
 
-	if (storedStations) {
-		// Use the stations from localStorage
-		stations = JSON.parse(storedStations);
-	} else {
-		// Fetch stations from the API
-		stations = await getAllStations();
-		localStorage.setItem("stations", JSON.stringify(stations)); // Save to localStorage
-	}
+    // Station Cards
+    createStationCard(station, userLocation) {
+        const distance = userLocation ? 
+            utils.calculateDistance(
+                userLocation.latitude, 
+                userLocation.longitude, 
+                station.latitude, 
+                station.longitude
+            ).toFixed(1) : '-';
+
+        return `
+            <div class="station-card" data-station-id="${station.id}">
+                <img src="${station.image}" alt="${station.name}" class="station-image" loading="lazy">
+                
+                <div class="station-info">
+                    <h3>${station.name}</h3>
+                    <p class="station-address">${station.address.replace(', SE', '')}</p>
+                    <div class="station-meta">
+                        <span>
+                            <i class="icon-location" aria-hidden="true"></i>
+                            ${distance} km
+                        </span>
+                        <span>
+                            <i class="icon-dollar" aria-hidden="true"></i>
+                            ${station.price}:-
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="station-actions">
+                    <button class="btn btn-primary" data-station-id="${station.id}">
+                        Välj
+                    </button>
+                </div>
+            </div>
+        `;
+    },
+
+    // Modal
+    showModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    },
+
+    hideModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    },
+
+    // Form validation
+    validateForm(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return false;
+
+        const requiredInputs = form.querySelectorAll('[required]');
+        let isValid = true;
+
+        requiredInputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.classList.add('error');
+            } else {
+                input.classList.remove('error');
+            }
+        });
+
+        return isValid;
+    }
+};
+
+// Page Controllers
+const pageControllers = {
+    // Home Page
+    initHomePage() {
+        const locationBtn = document.getElementById('location-btn');
+        const searchForm = document.getElementById('search-form');
+
+        if (locationBtn) {
+            locationBtn.addEventListener('click', async () => {
+                utils.showLoading(locationBtn);
+                
+                try {
+                    const location = await locationService.getCurrentPosition();
+                    utils.storage.set(CONFIG.STORAGE_KEYS.USER_LOCATION, location);
+                    
+                    // Update search input with address
+                    const address = await locationService.getAddressFromCoordinates(
+                        location.latitude, 
+                        location.longitude
+                    );
+                    
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput && address) {
+                        searchInput.placeholder = address;
+                    }
+                    
+                    // Redirect to results
+                    window.location.href = '/Resultatsida.html';
+                } catch (error) {
+                    console.error('Location error:', error);
+                    alert('Kunde inte hämta din plats. Försök igen eller ange adress manuellt.');
+                } finally {
+                    utils.hideLoading(locationBtn);
+                }
+            });
+        }
+
+        if (searchForm) {
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const searchInput = document.getElementById('search-input');
+                if (searchInput && searchInput.value.trim()) {
+                    // For now, just redirect to results
+                    // In a real app, you'd geocode the address first
+                    window.location.href = '/Resultatsida.html';
+                }
+            });
+        }
+    },
+
+    // Results Page
+    async initResultsPage() {
+        await stationService.initializeStations();
+        
+        const userLocation = utils.storage.get(CONFIG.STORAGE_KEYS.USER_LOCATION);
+        
+        if (!userLocation) {
+            // Redirect back to home if no location
+            window.location.href = '/index.html';
+            return;
+        }
+
+        this.displayStations();
+        this.initSorting();
+        this.initModal();
+    },
+
+    displayStations() {
+        const stationList = document.getElementById('station-list');
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        const resultsCount = document.getElementById('results-count');
+        
+        if (!stationList) return;
+
+        const userLocation = utils.storage.get(CONFIG.STORAGE_KEYS.USER_LOCATION);
+        const stationsWithDistance = stationService.getStationsWithDistance(userLocation);
+        const sortedStations = stationService.sortStations(stationsWithDistance, state.sortOrder);
+        
+        // Update results count
+        if (resultsCount) {
+            resultsCount.textContent = sortedStations.length;
+        }
+
+        // Get stations to display
+        const stationsToShow = sortedStations.slice(0, state.currentStationIndex + CONFIG.STATIONS_PER_PAGE);
+        
+        // Clear and populate station list
+        stationList.innerHTML = stationsToShow
+            .map(station => ui.createStationCard(station, userLocation))
+            .join('');
+
+        // Update current index
+        state.currentStationIndex = stationsToShow.length;
+
+        // Show/hide load more button
+        if (loadMoreBtn) {
+            loadMoreBtn.style.display = state.currentStationIndex >= sortedStations.length ? 'none' : 'block';
+            
+            // Add event listener for load more
+            loadMoreBtn.onclick = () => this.displayStations();
+        }
+
+        // Add click handlers for station cards
+        stationList.addEventListener('click', (e) => {
+            const button = e.target.closest('[data-station-id]');
+            if (button) {
+                const stationId = button.dataset.stationId;
+                const station = sortedStations.find(s => s.id === stationId);
+                if (station) {
+                    this.showStationModal(station, userLocation);
+                }
+            }
+        });
+    },
+
+    initSorting() {
+        const sortBtn = document.getElementById('sort-btn');
+        const sortText = document.getElementById('sort-text');
+        
+        if (sortBtn) {
+            sortBtn.addEventListener('click', () => {
+                // Toggle sort order
+                state.sortOrder = state.sortOrder === 'distance' ? 'price' : 'distance';
+                state.currentStationIndex = 0; // Reset pagination
+                
+                // Update button text
+                if (sortText) {
+                    sortText.textContent = state.sortOrder === 'distance' ? 
+                        'Sortera efter pris' : 'Sortera efter avstånd';
+                }
+                
+                // Re-display stations
+                this.displayStations();
+            });
+        }
+    },
+
+    showStationModal(station, userLocation) {
+        const modal = document.getElementById('booking-modal');
+        if (!modal) return;
+
+        // Populate modal with station data
+        const elements = {
+            name: document.getElementById('modal-station-name'),
+            image: document.getElementById('modal-station-image'),
+            address: document.getElementById('modal-station-address'),
+            distance: document.getElementById('modal-station-distance'),
+            price: document.getElementById('modal-station-price'),
+            description: document.getElementById('modal-station-description')
+        };
+
+        if (elements.name) elements.name.textContent = station.name;
+        if (elements.image) {
+            elements.image.src = station.image;
+            elements.image.alt = station.name;
+        }
+        if (elements.address) elements.address.textContent = station.address;
+        if (elements.distance && userLocation) {
+            const distance = utils.calculateDistance(
+                userLocation.latitude,
+                userLocation.longitude,
+                station.latitude,
+                station.longitude
+            ).toFixed(1);
+            elements.distance.textContent = `${distance} km`;
+        }
+        if (elements.price) elements.price.textContent = `${station.price}:-`;
+        if (elements.description) elements.description.textContent = station.description;
+
+        // Store selected station
+        utils.storage.set(CONFIG.STORAGE_KEYS.SELECTED_STATION, station);
+
+        // Show modal
+        ui.showModal('booking-modal');
+    },
+
+    initModal() {
+        const modal = document.getElementById('booking-modal');
+        const closeBtn = document.getElementById('modal-close');
+        const backBtn = document.getElementById('modal-back');
+        const form = document.getElementById('booking-form');
+        const confirmBtn = document.getElementById('modal-confirm');
+
+        // Close modal handlers
+        [closeBtn, backBtn].forEach(btn => {
+            if (btn) {
+                btn.addEventListener('click', () => {
+                    ui.hideModal('booking-modal');
+                });
+            }
+        });
+
+        // Close on backdrop click
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    ui.hideModal('booking-modal');
+                }
+            });
+        }
+
+        // Form validation
+        if (form) {
+            const dateInput = document.getElementById('booking-date');
+            const timeInputs = document.querySelectorAll('input[name="time"]');
+            const validationMessage = document.getElementById('form-validation-message');
+
+            const validateBookingForm = () => {
+                const hasDate = dateInput && dateInput.value;
+                const hasTime = Array.from(timeInputs).some(input => input.checked);
+                const isValid = hasDate && hasTime;
+
+                if (confirmBtn) {
+                    confirmBtn.disabled = !isValid;
+                }
+
+                if (validationMessage) {
+                    validationMessage.style.display = isValid ? 'none' : 'block';
+                }
+            };
+
+            // Add event listeners
+            if (dateInput) {
+                dateInput.addEventListener('change', validateBookingForm);
+            }
+
+            timeInputs.forEach(input => {
+                input.addEventListener('change', validateBookingForm);
+            });
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const bookingData = {
+                    date: formData.get('date') || dateInput.value,
+                    time: formData.get('time'),
+                    station: utils.storage.get(CONFIG.STORAGE_KEYS.SELECTED_STATION)
+                };
+
+                utils.storage.set(CONFIG.STORAGE_KEYS.BOOKING_INFO, bookingData);
+                window.location.href = '/betalnings.html';
+            });
+        }
+    },
+
+    // Payment Page
+    initPaymentPage() {
+        const form = document.getElementById('payment-form');
+        const confirmBtn = document.getElementById('confirm-booking-btn');
+        const backBtn = document.getElementById('back-btn');
+
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                history.back();
+            });
+        }
+
+        if (form) {
+            // Form validation
+            const validatePaymentForm = utils.debounce(() => {
+                const isValid = ui.validateForm('payment-form');
+                if (confirmBtn) {
+                    confirmBtn.disabled = !isValid;
+                }
+            }, 300);
+
+            // Add event listeners to all form inputs
+            form.addEventListener('input', validatePaymentForm);
+            form.addEventListener('change', validatePaymentForm);
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (ui.validateForm('payment-form')) {
+                    // Store customer data
+                    const formData = new FormData(form);
+                    const customerData = {
+                        name: formData.get('customer-name') || document.getElementById('customer-name').value,
+                        email: formData.get('customer-email') || document.getElementById('customer-email').value,
+                        phone: formData.get('customer-phone') || document.getElementById('customer-phone').value,
+                        payment: formData.get('payment') || 'on-site'
+                    };
+
+                    // Merge with existing booking data
+                    const bookingData = utils.storage.get(CONFIG.STORAGE_KEYS.BOOKING_INFO) || {};
+                    const completeBooking = { ...bookingData, customer: customerData };
+                    
+                    utils.storage.set(CONFIG.STORAGE_KEYS.BOOKING_INFO, completeBooking);
+                    window.location.href = '/confirm.html';
+                }
+            });
+        }
+    },
+
+    // Confirmation Page
+    initConfirmPage() {
+        const bookingData = utils.storage.get(CONFIG.STORAGE_KEYS.BOOKING_INFO);
+        
+        if (!bookingData || !bookingData.station) {
+            window.location.href = '/index.html';
+            return;
+        }
+
+        // Populate confirmation details
+        const elements = {
+            workshopName: document.getElementById('confirm-workshop-name'),
+            workshopAddress: document.getElementById('confirm-workshop-address'),
+            date: document.getElementById('confirm-date'),
+            time: document.getElementById('confirm-time')
+        };
+
+        if (elements.workshopName) {
+            elements.workshopName.textContent = bookingData.station.name;
+        }
+        if (elements.workshopAddress) {
+            elements.workshopAddress.textContent = bookingData.station.address;
+        }
+        if (elements.date && bookingData.date) {
+            elements.date.textContent = utils.formatDate(bookingData.date);
+        }
+        if (elements.time) {
+            elements.time.textContent = `Klockan ${bookingData.time}`;
+        }
+    },
+
+    // Login Page
+    initLoginPage() {
+        const form = document.getElementById('login-form');
+        const loginBtn = document.getElementById('login-btn');
+        const backBtn = document.getElementById('back-btn');
+
+        if (backBtn) {
+            backBtn.addEventListener('click', () => {
+                window.location.href = '/index.html';
+            });
+        }
+
+        if (form) {
+            // Form validation
+            const validateLoginForm = utils.debounce(() => {
+                const isValid = ui.validateForm('login-form');
+                if (loginBtn) {
+                    loginBtn.disabled = !isValid;
+                }
+            }, 300);
+
+            form.addEventListener('input', validateLoginForm);
+            
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (ui.validateForm('login-form')) {
+                    // Simulate login process
+                    utils.showLoading(loginBtn);
+                    
+                    setTimeout(() => {
+                        utils.hideLoading(loginBtn);
+                        alert('Inloggning kommer snart!');
+                    }, 1000);
+                }
+            });
+        }
+    }
+};
+
+// Main Application
+class DaeckadApp {
+    constructor() {
+        this.currentPage = this.getCurrentPage();
+        this.init();
+    }
+
+    getCurrentPage() {
+        const path = window.location.pathname;
+        const page = path.split('/').pop() || 'index.html';
+        return page.replace('.html', '');
+    }
+
+    async init() {
+        // Initialize common UI components
+        ui.initNavigation();
+
+        // Initialize page-specific functionality
+        try {
+            switch (this.currentPage) {
+                case 'index':
+                    pageControllers.initHomePage();
+                    break;
+                case 'Resultatsida':
+                    await pageControllers.initResultsPage();
+                    break;
+                case 'betalnings':
+                    pageControllers.initPaymentPage();
+                    break;
+                case 'confirm':
+                    pageControllers.initConfirmPage();
+                    break;
+                case 'login':
+                    pageControllers.initLoginPage();
+                    break;
+            }
+        } catch (error) {
+            console.error('Error initializing page:', error);
+        }
+
+        // Initialize common features
+        this.initCommonFeatures();
+    }
+
+    initCommonFeatures() {
+        // Keyboard navigation improvements
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Close any open modals
+                const activeModal = document.querySelector('.modal.active');
+                if (activeModal) {
+                    activeModal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', () => {
+                const loadTime = performance.now();
+                console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
+            });
+        }
+    }
 }
 
-function getDistanceFromUser(stationLat, stationLng, returnType) {
-	// Get user location from sessionStorage
-	const locationData = sessionStorage.getItem("storedUserLocation");
-
-	// Log the location data to see if it's being fetched correctly
-	// console.log("User Location Data from Session:", locationData);
-
-	// Check if location data exists in sessionStorage
-	if (locationData) {
-		const { latitude: userLat, longitude: userLng } = JSON.parse(locationData);
-
-		// Check if latitude and longitude exist in the data
-		if (userLat && userLng) {
-			// Calculate the distance from the user to the station
-			const distanceFromUser = calculateDistance(
-				userLat,
-				userLng,
-				stationLat,
-				stationLng
-			);
-
-			// Log the calculated distance
-			// console.log("Distance from user to station:", distanceFromUser);
-
-			// Return as a formatted string if returnType is 'text'
-			if (returnType === "text") {
-				return `${distanceFromUser.toFixed(1)} km`; // Return as string with "1" decimal
-			}
-			// Return as a number if returnType is anything else
-			else if (returnType !== "text") {
-				return distanceFromUser;
-			}
-		} else {
-			console.error("User latitude or longitude is missing!");
-		}
-	} else {
-		console.error("No stored location data found in sessionStorage!");
-	}
-	return null;
+// Initialize app when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => new DaeckadApp());
+} else {
+    new DaeckadApp();
 }
 
-// Visar alla stationer som hämtats från API på sidan i form av kort
-//Sorterar via avstånd
-async function displayMoreStations(sortByDistance = true) {
-	const stationList = document.querySelector("#stationList");
-	const showMoreBtn = document.querySelector("#showMoreBtn");
-
-	const locationData = sessionStorage.getItem("storedUserLocation");
-	let userCoordinates = null;
-
-	if (locationData) {
-		userCoordinates = JSON.parse(locationData);
-	} else {
-		console.error("No stored location data found in sessionStorage!");
-		return;
-	}
-
-	let stationsWithDistance = stations;
-
-	// Kontrollerar om variablen är true, och kör då koden som sorterar via avstånd
-	// annars körs annan sorteringskod som angetts
-	if (sortByDistance) {
-		stationsWithDistance = stations.map((station) => {
-			const distance = calculateDistance(
-				userCoordinates.latitude,
-				userCoordinates.longitude,
-				station.latitude,
-				station.longitude
-			);
-			return { ...station, distance };
-		});
-
-		// Sortera stationerna baserat på avståndet
-		stationsWithDistance.sort((a, b) => a.distance - b.distance);
-	}
-
-	// Slice the next batch of stations
-	const stationsToDisplay = stationsWithDistance.slice(
-		currentStationIndex,
-		currentStationIndex + stationsPerPage
-	);
-
-	// Bygger HTML för korten
-	let displayStation = "";
-	stationsToDisplay.forEach((station) => {
-		let distanceText = "-";
-		distanceText = getDistanceFromUser(
-			station.latitude,
-			station.longitude,
-			"text"
-		);
-		displayStation += `
-    <div class="card" station-id="${station.id}">
-      	<img src="${station.image}" alt="Bild på Verkstad" />
-      	<div class="card-content">
-        	<h3 class= "station-name">${station.name}</h3>
-        	<p class="station-address">${station.address.replace(", SE", "")}</p>
-		
-        	<div class="info-row">
-          		<p class="station-distance">
-					<i class="fa-solid fa-location-crosshairs color-primary">
-					</i> ${distanceText}
-				</p>
-          		<p class="station-price">
-					<i class="fa-solid fa-coins color-primary">
-					</i> ${station.price}:-
-				</p>
-        	</div>
-      	</div>
-      	<a href="#" class="book-button btn-primary" data-id="${
-					station.id
-				}">Välj</a>
-    </div>
-    `;
-	});
-
-	// Sätter in HTML'n ovan i "stationList"
-	stationList.insertAdjacentHTML("beforeend", displayStation);
-
-	// Updaterar "hur många stationer som visas"-index
-	currentStationIndex += stationsPerPage;
-
-	// lägger till data till modalen EFTER att korten skapats
-	addModalContent();
-
-	// Om alla stationer har visats, göm "visa fler"-knappen
-	if (currentStationIndex >= stations.length) {
-		showMoreBtn.style.display = "none";
-	}
-}
-
-// Lägger in station-data i modal-korten
-function addModalContent() {
-	const timesModal = document.querySelector("#times-modal");
-	const bookButtons = document.querySelectorAll(".book-button");
-	const closeModal = document.querySelector("#close-modal-button");
-
-	closeModal.addEventListener("click", () => {
-		timesModal.close();
-	});
-
-	bookButtons.forEach((button) => {
-		button.addEventListener("click", (event) => {
-			const stationId = button.getAttribute("data-id"); // Get the station ID
-			const selectedStation = stations.find(
-				(station) => station.id == stationId
-			); // Find the station object
-
-			let distanceText = "-";
-			if (getDistanceFromUser) {
-				distanceText = getDistanceFromUser(
-					selectedStation.latitude,
-					selectedStation.longitude,
-					"text"
-				);
-			}
-
-			document.querySelector("#modal-station-name").textContent =
-				selectedStation.name;
-			document.querySelector("#modal-station-address").textContent =
-				selectedStation.address;
-			document.querySelector("#modal-station-distance").textContent =
-				distanceText;
-			document.querySelector(
-				"#modal-station-price"
-			).textContent = `${selectedStation.price} :-`;
-			document.querySelector("#modal-station-description").textContent =
-				selectedStation.description;
-			const modalImage = document.querySelector("#modal-station-image");
-			modalImage.src = selectedStation.image; // image URL
-			modalImage.alt = `Bild på ${selectedStation.name}`; // alt text
-
-			// Spara den valda stationen i sessionStorage
-			sessionStorage.setItem(
-				"selectedStation",
-				JSON.stringify(selectedStation)
-			);
-			console.log("Vald station sparad i sessionStorage:", selectedStation); // Logga den valda stationen
-
-			// öppnar modalen
-			timesModal.showModal();
-			addTimeFormLogic(stationId);
-		});
-	});
-}
-
-// Funktion så att "bekräfta-knappen" går från "disabled" till fungerande om
-//  de obligatoriska fälten är iflyllda.
-
-function checkFormCompletion(formSelector, buttonSelector) {
-	const form = document.querySelector(formSelector);
-	const button = document.querySelector(buttonSelector);
-
-	const requiredInputs = form.querySelectorAll(
-		"input[required], select[required], textarea[required]"
-	);
-	let allFilled = true;
-
-	requiredInputs.forEach((input) => {
-		if (!input.value.trim()) {
-			allFilled = false;
-		}
-	});
-
-	if (allFilled) {
-		button.classList.remove("disabled");
-		button.disabled = false;
-	} else {
-		button.classList.add("disabled");
-		button.disabled = true;
-	}
-}
-// Denna funktion kan bytas mot "checkFormCompletion" istället. Denna är för specifik :)
-function updateButtonState(confirmButton, selectedDate, selectedTime) {
-	const requiredInfoText = document.querySelector("#requiredInfoText");
-	if (selectedDate && selectedTime) {
-		requiredInfoText.classList.add("hidden");
-		confirmButton.classList.remove("disabled");
-		confirmButton.disabled = false;
-	} else {
-		requiredInfoText.classList.remove("hidden");
-		confirmButton.classList.add("disabled");
-	}
-}
-
-// Add the date and time logic here
-function addTimeFormLogic(stationId) {
-	const dateInput = document.getElementById("date");
-	const timeInputs = document.querySelectorAll('input[name="time"]');
-	const confirmButton = document.getElementById("time-btn");
-
-	let selectedDate = null;
-	let selectedTime = null;
-
-	// Listen for date selection
-	dateInput.addEventListener("change", function () {
-		selectedDate = dateInput.value;
-		console.log(`Valt datum: ${selectedDate}`);
-		updateButtonState(confirmButton, selectedDate, selectedTime); // Pass parameters
-	});
-
-	// Listen for time selection
-	timeInputs.forEach(function (input) {
-		input.addEventListener("change", function () {
-			selectedTime = input.value;
-			console.log(`Vald tid: ${selectedTime}`);
-			updateButtonState(confirmButton, selectedDate, selectedTime); // Pass parameters
-		});
-	});
-
-	// Handle form submission and redirection
-	confirmButton.addEventListener("click", function (event) {
-		event.preventDefault(); // Prevent the default form submission
-
-		if (selectedDate && selectedTime) {
-			// Spara i sessionStorage
-			const orderInfo = {
-				stationId: stationId,
-				date: selectedDate,
-				time: selectedTime,
-			};
-			sessionStorage.setItem("currentOrderInfo", JSON.stringify(orderInfo));
-
-			// Redirect to the next page with the stationId, selected date, and time
-			const nextPageUrl = `/betalnings.html?stationId=${encodeURIComponent(
-				stationId
-			)}&date=${encodeURIComponent(selectedDate)}&time=${encodeURIComponent(
-				selectedTime
-			)}`;
-			window.location.href = nextPageUrl;
-		}
-	});
-}
-
-// Funktion som sparar all beställningsinformation i sessionStorage som "currentOrderInfo"
-function displayOrderInfo() {
-	const urlParams = new URLSearchParams(window.location.search);
-	const stationId = urlParams.get("stationId");
-	const selectedDate = urlParams.get("date");
-	const selectedTime = urlParams.get("time");
-	// Retrieve all stations from sessionStorage
-	const allStations = JSON.parse(sessionStorage.getItem("stations"));
-
-	// Find the selected station using the stationId
-	const selectedStation = allStations.find(
-		(station) => station.id == stationId
-	);
-
-	let orderInfo = [
-		{ "Selected station": selectedStation },
-		{ "Selected date": selectedDate },
-		{ "Selected time": selectedTime },
-	];
-	sessionStorage.setItem("currentOrderInfo", JSON.stringify(orderInfo));
-	// Now you have the selected station and can use its details
-	console.log(orderInfo); // Full station details
-	console.log(`Selected Date: ${selectedDate}, Selected Time: ${selectedTime}`);
-}
-
-// "nästa" och "tillbaka" funktioner
-const navigationSequence = [
-	"index.html",
-	"Resultatsida.html",
-	"betalnings.html",
-	"confirm.html",
-];
-
-function getCurrentPageIndex() {
-	const currentPage = window.location.pathname.split("/").pop(); //
-	return navigationSequence.indexOf(currentPage);
-}
-
-function handleNavigation(direction) {
-	const currentIndex = getCurrentPageIndex();
-	let nextIndex;
-
-	if (direction === "next") {
-		nextIndex =
-			currentIndex === navigationSequence.length - 1 ? 0 : currentIndex + 1;
-	} else if (direction === "back") {
-		nextIndex =
-			currentIndex === 0 ? navigationSequence.length - 1 : currentIndex - 1;
-	}
-
-	window.location.href = navigationSequence[nextIndex];
-}
-
-//Funktion för att hämta användarens nuvarande adress
-
-// Simplified getUserCoordinates function using a Promise
-function getUserCoordinates() {
-	return new Promise((resolve, reject) => {
-		navigator.geolocation.getCurrentPosition(
-			(position) => {
-				const { latitude, longitude } = position.coords;
-				resolve({ latitude, longitude });
-			},
-			(error) => reject(error)
-		);
-	});
-}
-
-async function userLocation() {
-	try {
-		// Await user location
-		const { latitude, longitude } = await getUserCoordinates();
-
-		// Save userLocation in session storage
-		sessionStorage.setItem(
-			"storedUserLocation",
-			JSON.stringify({ latitude, longitude })
-		);
-
-		// Optionally, update the search input placeholder
-		const address = await addressCoordinates(latitude, longitude);
-		if (address && window.location.pathname === "/index.html") {
-			document.getElementById("search-input").placeholder = address;
-		}
-
-		console.log("'User location' retrieved:", { latitude, longitude });
-	} catch (error) {
-		console.error("Error fetching user location:", error);
-	}
-}
-
-//Funktion för att hämta stad och gatunamn
-// och returnerar dem som en sträng
-
-async function addressCoordinates(latitude, longitude) {
-	const response = await fetch(
-		`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-	);
-	const data = await response.json();
-
-	const city =
-		data.address.city || data.address.town || data.address.village || "";
-	const street = data.address.road || "";
-
-	return `${city}, ${street}`;
-}
-
-// Hämtar/"fetchar" alla stationer från vår API
-async function getAllStations() {
-	try {
-		const response = await fetch(apiUrl, {
-			headers: {
-				"Content-Type": "application/json",
-				"X-Access-Key": apiAccessKey,
-			},
-		});
-
-		if (!response.ok) {
-			throw new Error(`Error fetching stations: ${response.status}`);
-		}
-
-		const data = await response.json();
-		return data.record.stations; // JSONBin data structure.
-		// Om vi använder "json-server" ska vi bara ha "return data" ovan
-	} catch (error) {
-		console.error("Error fetching data:", error);
-		return null;
-	}
-}
-
-// Haversine formula to calculate the distance between two coordinates in kilometers
-function calculateDistance(lat1, lon1, lat2, lon2) {
-	const R = 6371; // Radius of the Earth in km
-	const dLat = (lat2 - lat1) * (Math.PI / 180);
-	const dLon = (lon2 - lon1) * (Math.PI / 180);
-	const a =
-		Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-		Math.cos(lat1 * (Math.PI / 180)) *
-			Math.cos(lat2 * (Math.PI / 180)) *
-			Math.sin(dLon / 2) *
-			Math.sin(dLon / 2);
-	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	const distance = R * c; // Distance in km
-	return distance;
-}
-
-// --------------Låt detta ligga längst ner :)-----------------------
-
-// Återanvändbara funktioner
-// Funktion för att "toggla" en CSS-klass av/på ---Bra att ha :)
-function toggleClass(element, className) {
-	element.classList.toggle(className);
-}
-// Delay-funktion
-// Använd ---> "await delay(2000);" om man t.ex. vill ha 2 sekunders delay
-function delay(ms) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// Visa / göm dropdown meny
-function showDropDown() {
-	let dropDownContent = document.querySelector(".dropdown-content");
-	dropDownContent.style.display =
-		dropDownContent.style.display === "block" ? "" : "block";
-}
-
-function sortStations() {
-	// Kontrollera om stationerna redan har hämtats, annars hämta dem
-	if (stations.length === 0) {
-		alert("Inga stationer finns tillgängliga att sortera!");
-		return;
-	}
-
-	// Sortera stationerna från lägst till högst pris
-	// stations.sort((a, b) => a.price - b.price);
-
-	// Töm nuvarande stationslistan innan du visar den sorterade listan
-	const stationList = document.querySelector("#stationList");
-	stationList.innerHTML = "";
-
-	const SortingChoiceElement = document.querySelector(".Sorteringsval");
-
-	// Växla sorteringsordningen
-	if (currentSortOrder === "distance") {
-		// Om nuvarande sorteringsordning är avstånd
-		// Sortera stationerna efter pris
-		stations.sort((a, b) => a.price - b.price);
-		currentSortOrder = "price"; // Växla till pris
-		SortingChoiceElement.textContent = "Pris";
-	} else {
-		// Om nuvarande sorteringsordning inte är avstånd
-		// Hämta användarens lagrade koordinater från sessionStorage
-		const locationData = sessionStorage.getItem("storedUserLocation");
-		let userCoordinates = null;
-
-		if (locationData) {
-			userCoordinates = JSON.parse(locationData);
-			stations = stations.map((station) => {
-				const distance = calculateDistance(
-					userCoordinates.latitude,
-					userCoordinates.longitude,
-					station.latitude,
-					station.longitude
-				);
-				return { ...station, distance };
-			});
-
-			// Sortera stationerna efter avstånd
-			stations.sort((a, b) => a.distance - b.distance);
-		}
-		currentSortOrder = "distance"; // Växla till avstånd
-		SortingChoiceElement.textContent = "Avstånd";
-	}
-
-	// Återställ indexet för att börja från början
-	currentStationIndex = 0;
-
-	// Visa stationerna igen, men nu i sorterad ordning, efter pris
-	displayMoreStations(false); // False tar bort avstånd sorteringen
+// Export for potential module usage
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { DaeckadApp, utils, stationService, locationService };
 }

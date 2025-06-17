@@ -1,139 +1,170 @@
 <!DOCTYPE html>
 <html lang="sv">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="book tire change" />
-		<meta name="keywords" content="tire, car, mechanic" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Boka däckbyte snabbt och enkelt - jämför priser och tider från verkstäder nära dig">
+    <meta name="keywords" content="däckbyte, bilservice, verkstad, boka tid">
+    
+    <title>DÄCKAD - Boka däckbyte enkelt</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/images/dack4.png" as="image">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Scripts -->
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <img src="/images/dack4.png" alt="DÄCKAD" class="logo" id="logo">
+                
+                <nav class="nav-menu">
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Öppna meny">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    
+                    <div class="nav-dropdown" id="nav-dropdown">
+                        <a href="#" aria-label="Byt till engelska">
+                            <i class="icon-globe" aria-hidden="true"></i>
+                            Change to English
+                        </a>
+                        <a href="login.html">
+                            <i class="icon-wrench" aria-hidden="true"></i>
+                            Logga in som verkstad
+                        </a>
+                        <a href="#" id="theme-toggle">
+                            <i class="icon-moon" aria-hidden="true"></i>
+                            Mörkt tema
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-		<!-- FONT AWESOME -->
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-			integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-			crossorigin="anonymous"
-			referrerpolicy="no-referrer"
-		/>
-		<!-- CSS Reset -->
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
-		/>
-		<!-- Custom CSS -->
-		<link rel="stylesheet" href="styles.css" />
-		<!-- JavaScript -->
-		<script src="script.js" defer></script>
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="search-section">
+            <div class="container">
+                <h1>Dags att byta däck?</h1>
+                <p class="text-lg mb-8">Vi hittar den bästa verkstaden åt dig - jämför priser och boka direkt</p>
+                
+                <form class="search-form" id="search-form" role="search">
+                    <button type="button" class="location-btn" id="location-btn">
+                        <i class="icon-location" aria-hidden="true"></i>
+                        Använd min plats
+                    </button>
+                    
+                    <div class="form-group">
+                        <label for="search-input" class="sr-only">Sök efter ort eller adress</label>
+                        <input 
+                            type="search" 
+                            id="search-input" 
+                            class="form-input" 
+                            placeholder="Skriv in en ort eller adress"
+                            autocomplete="address-line1"
+                        >
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        Sök verkstäder
+                    </button>
+                </form>
+            </div>
+        </section>
 
-		<title>DÄCKAD</title>
-		<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
-	</head>
-	<body class="homepage">
-		<header>
-			<div class="logo-container-index">
-				<img
-					src="/images/dack4.png"
-					alt="DÄCKAD Logga"
-					class="logo"
-					id="logo"
-				/>
-			</div>
-			<nav class="navbar">
-				<div class="dropdown">
-					<span class="dropbtn" tabindex="0">&#9776;</span>
-					<div class="dropdown-content">
-						<a href="" tabindex="0"
-							><i class="fa-solid fa-earth-europe"></i>Change to english</a
-						>
-						<a href="login.html" tabindex="0"
-							><i class="fa-solid fa-wrench"></i>Logga in som verkstad</a
-						>
-						<a href="" tabindex="0"
-							><i class="fa-solid fa-circle-half-stroke"></i>Ljust/mörkt tema</a
-						>
-					</div>
-				</div>
-			</nav>
-		</header>
-		<main>
-			<h1>Dags att byta dä<span class="color-accent">c</span>k?</h1>
+        <!-- How it Works -->
+        <section class="section">
+            <div class="container">
+                <h2 class="text-center mb-8">Så här fungerar det</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-step active">
+                        <div class="timeline-icon">
+                            <i class="icon-search" aria-hidden="true"></i>
+                        </div>
+                        <span class="timeline-text">Ange din plats</span>
+                    </div>
+                    
+                    <div class="timeline-connector"></div>
+                    
+                    <div class="timeline-step">
+                        <div class="timeline-icon">
+                            <i class="icon-calendar" aria-hidden="true"></i>
+                        </div>
+                        <span class="timeline-text">Välj verkstad & tid</span>
+                    </div>
+                    
+                    <div class="timeline-connector"></div>
+                    
+                    <div class="timeline-step">
+                        <div class="timeline-icon">
+                            <i class="icon-check" aria-hidden="true"></i>
+                        </div>
+                        <span class="timeline-text">Bekräfta bokning</span>
+                    </div>
+                </div>
+                
+                <p class="text-center text-lg">
+                    Jämför priser och avstånd bland alla registrerade verkstäder och välj den som passar dig bäst!
+                </p>
+            </div>
+        </section>
+    </main>
 
-			<section class="box-green search-box">
-				<h2>Vi hittar en verkstad åt dig!</h2>
-				<form class="search-form" role="search">
-					<button id="location-text" class="btn-accent">
-						<i class="fa-solid fa-location-crosshairs"></i>
-						<span>Använd min plats</span>
-					</button>
-					<span>Eller skriv din adress här:</span>
-					<input
-						type="search"
-						name="search-input"
-						id="search-input"
-						placeholder="Skriv in en ort eller adress"
-					/>
-					<button class="btn-primary search-btn">SÖK</button>
-				</form>
-			</section>
-
-			<p class="compare-text">
-				Jämför priser och avstånd bland alla registrerade verkstäder och välj
-				den som passar dig!
-			</p>
-			<section class="guideSection">
-				<h3 class="color-primary">Gör så här:</h3>
-				<div class="guide-row">
-					<div class="guide-content">
-						<p>Skriv var du befinner dig</p>
-						<i class="fa-solid fa-car"></i>
-					</div>
-					<div class="guide-content">
-						<i class="fa-solid fa-arrow-right"></i>
-					</div>
-					<div class="guide-content">
-						<p>Välj verkstad, tid och datum</p>
-						<i class="fa-solid fa-calendar-days"></i>
-					</div>
-					<div class="guide-content">
-						<i class="fa-solid fa-arrow-right"></i>
-					</div>
-					<div class="guide-content">
-						<p>Bli däckad!</p>
-						<i class="fa-solid fa-face-smile"></i>
-					</div>
-				</div>
-				<h3 class="color-primary">Enkelt va?</h3>
-			</section>
-		</main>
-		<footer>
-			<div class="footer-container">
-				<div class="footer-contact">
-					<h5>Kontakta oss</h5>
-					<ul>
-						<li>Adressgatan 12</li>
-						<li>123 45 Bilan</li>
-						<li>deackad@mail.com</li>
-						<li>070-123 45 67</li>
-					</ul>
-				</div>
-				<div class="footer-info">
-					<h5>Bra att veta</h5>
-					<ul>
-						<li><a href="/login.html">För dig som har en verkstad</a></li>
-						<li><a href="#">För dig som privatkund</a></li>
-						<li><a href="#">Hur vi behandlar dina personuppgifter</a></li>
-						<li><a href="#">Använd ljust läge</a></li>
-					</ul>
-				</div>
-				<div class="footer-socials">
-					<h5>Följ oss på sociala medier</h5>
-					<div class="social-links">
-						<a href="#"><i class="fab fa-facebook-f"></i></a>
-						<a href="#"><i class="fab fa-twitter"></i></a>
-						<a href="#"><i class="fab fa-instagram"></i></a>
-						<a href="#"><i class="fab fa-linkedin-in"></i></a>
-					</div>
-				</div>
-			</div>
-		</footer>
-	</body>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>Kontakt</h5>
+                    <ul>
+                        <li>Adressgatan 12</li>
+                        <li>123 45 Bilan</li>
+                        <li><a href="mailto:info@daeckad.se">info@daeckad.se</a></li>
+                        <li><a href="tel:+46701234567">070-123 45 67</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Information</h5>
+                    <ul>
+                        <li><a href="login.html">För verkstäder</a></li>
+                        <li><a href="#">Privatpersoner</a></li>
+                        <li><a href="#">Integritetspolicy</a></li>
+                        <li><a href="#">Användarvillkor</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Följ oss</h5>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">
+                            <i class="icon-facebook" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <i class="icon-twitter" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <i class="icon-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <i class="icon-linkedin" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
 </html>

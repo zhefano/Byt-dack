@@ -1,218 +1,248 @@
 <!DOCTYPE html>
 <html lang="sv">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="description" content="book tire change" />
-		<meta name="keywords" content="tire, car, mechanic" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bekräfta din bokning och välj betalningsalternativ">
+    <meta name="keywords" content="betalning, bokning, däckbyte">
+    
+    <title>Betalning - DÄCKAD</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <img src="/images/dack4.png" alt="DÄCKAD" class="logo" id="logo">
+                
+                <nav class="nav-menu">
+                    <button class="nav-toggle" id="nav-toggle" aria-label="Öppna meny">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    
+                    <div class="nav-dropdown" id="nav-dropdown">
+                        <a href="#">
+                            <i class="icon-globe" aria-hidden="true"></i>
+                            Change to English
+                        </a>
+                        <a href="login.html">
+                            <i class="icon-wrench" aria-hidden="true"></i>
+                            Logga in som verkstad
+                        </a>
+                        <a href="#" id="theme-toggle">
+                            <i class="icon-moon" aria-hidden="true"></i>
+                            Mörkt tema
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
-		<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
-		<title>Betalningsalternativ</title>
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Progress Timeline -->
+            <div class="timeline">
+                <div class="timeline-step completed">
+                    <div class="timeline-icon">
+                        <i class="icon-check" aria-hidden="true"></i>
+                    </div>
+                    <span class="timeline-text">Plats vald</span>
+                </div>
+                
+                <div class="timeline-connector"></div>
+                
+                <div class="timeline-step completed">
+                    <div class="timeline-icon">
+                        <i class="icon-check" aria-hidden="true"></i>
+                    </div>
+                    <span class="timeline-text">Verkstad vald</span>
+                </div>
+                
+                <div class="timeline-connector"></div>
+                
+                <div class="timeline-step active">
+                    <div class="timeline-icon">
+                        <i class="icon-payment" aria-hidden="true"></i>
+                    </div>
+                    <span class="timeline-text">Betalning</span>
+                </div>
+                
+                <div class="timeline-connector"></div>
+                
+                <div class="timeline-step">
+                    <div class="timeline-icon">
+                        <i class="icon-check-circle" aria-hidden="true"></i>
+                    </div>
+                    <span class="timeline-text">Bekräftelse</span>
+                </div>
+            </div>
 
-		<!-- CSS Reset -->
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
-		/>
+            <!-- Page Header -->
+            <div class="text-center mb-8">
+                <h1>Bekräfta din bokning</h1>
+                <p class="text-lg">Nästan klart! Fyll i dina kontaktuppgifter och välj betalningsalternativ.</p>
+            </div>
 
-		<!-- Ikoner till footer -->
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-			integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
-			crossorigin="anonymous"
-			referrerpolicy="no-referrer"
-		/>
-		<!--commit test -->
-		<!-- Custom CSS -->
-		<link rel="stylesheet" href="styles.css" />
-		<script src="script.js" defer></script>
-		<title>DÄCKAD</title>
-	</head>
-	<body>
-		<!-- Header med logotyp -->
-		<header>
-			<div class="logo-container">
-				<img
-					src="/images/dack4.png"
-					alt="DÄCKAD Logga"
-					class="logo"
-					id="logo"
-				/>
-			</div>
-			<nav class="navbar">
-				<div class="dropdown">
-					<span class="dropbtn" tabindex="0">&#9776;</span>
-					<div class="dropdown-content">
-						<a href="" tabindex="0"
-							><i class="fa-solid fa-earth-europe"></i>Change to english</a
-						>
-						<a href="login.html" tabindex="0"
-							><i class="fa-solid fa-wrench"></i>Logga in som verkstad</a
-						>
-						<a href="" tabindex="0"
-							><i class="fa-solid fa-circle-half-stroke"></i>Ljust/mörkt tema</a
-						>
-					</div>
-				</div>
-			</nav>
-		</header>
-		<main>
-			<div class="timeline-row">
-				<div class="timeline-content">
-					<a href="index.html">
-						<p>Startsida</p>
-						<i class="fa-solid fa-car"></i>
-					</a>
-				</div>
+            <!-- Booking Form -->
+            <div style="max-width: 600px; margin: 0 auto;">
+                <div class="card">
+                    <div class="card-content">
+                        <form id="payment-form">
+                            <!-- Contact Information -->
+                            <div class="mb-8">
+                                <h3 class="mb-6">Kontaktuppgifter</h3>
+                                
+                                <div class="form-group">
+                                    <label for="customer-name" class="form-label">Namn *</label>
+                                    <input 
+                                        type="text" 
+                                        id="customer-name" 
+                                        class="form-input" 
+                                        placeholder="Ditt fullständiga namn"
+                                        required
+                                        autocomplete="name"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="customer-email" class="form-label">E-post *</label>
+                                    <input 
+                                        type="email" 
+                                        id="customer-email" 
+                                        class="form-input" 
+                                        placeholder="din@email.se"
+                                        required
+                                        autocomplete="email"
+                                    >
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="customer-phone" class="form-label">Telefon *</label>
+                                    <input 
+                                        type="tel" 
+                                        id="customer-phone" 
+                                        class="form-input" 
+                                        placeholder="070-123 45 67"
+                                        required
+                                        autocomplete="tel"
+                                    >
+                                </div>
+                            </div>
 
-				<div class="timeline-content">
-					<i class="fa-solid fa-arrow-right"></i>
-				</div>
+                            <!-- Payment Options -->
+                            <div class="mb-8">
+                                <h3 class="mb-6">Betalningsalternativ</h3>
+                                
+                                <div style="display: grid; gap: 1rem;">
+                                    <div class="payment-option">
+                                        <input type="radio" id="pay-on-site" name="payment" value="on-site" checked>
+                                        <label for="pay-on-site" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer;">
+                                            <i class="icon-location" aria-hidden="true"></i>
+                                            <div>
+                                                <div style="font-weight: 500;">Betala på plats</div>
+                                                <div style="font-size: var(--text-sm); color: var(--text-secondary);">Betala direkt till verkstaden</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="payment-option">
+                                        <input type="radio" id="pay-card" name="payment" value="card" disabled>
+                                        <label for="pay-card" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); cursor: not-allowed; opacity: 0.5;">
+                                            <i class="icon-credit-card" aria-hidden="true"></i>
+                                            <div>
+                                                <div style="font-weight: 500; text-decoration: line-through;">Betala med kort</div>
+                                                <div style="font-size: var(--text-sm); color: var(--text-secondary);">Kommer snart</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="payment-option">
+                                        <input type="radio" id="pay-swish" name="payment" value="swish" disabled>
+                                        <label for="pay-swish" style="display: flex; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); cursor: not-allowed; opacity: 0.5;">
+                                            <i class="icon-mobile" aria-hidden="true"></i>
+                                            <div>
+                                                <div style="font-weight: 500; text-decoration: line-through;">Betala med Swish</div>
+                                                <div style="font-size: var(--text-sm); color: var(--text-secondary);">Kommer snart</div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class="timeline-content">
-					<a href="Resultatsida.html">
-						<p>Verkstad</p>
-						<i class="fa-solid fa-calendar-days"></i>
-					</a>
-				</div>
+                            <!-- Form Actions -->
+                            <div style="display: flex; gap: 1rem;">
+                                <button type="button" class="btn btn-secondary" id="back-btn" style="flex: 1;">
+                                    Tillbaka
+                                </button>
+                                <button type="submit" class="btn btn-primary" id="confirm-booking-btn" style="flex: 1;" disabled>
+                                    Bekräfta bokning
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-				<div class="timeline-content">
-					<i class="fa-solid fa-arrow-right"></i>
-				</div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>Kontakt</h5>
+                    <ul>
+                        <li>Adressgatan 12</li>
+                        <li>123 45 Bilan</li>
+                        <li><a href="mailto:info@daeckad.se">info@daeckad.se</a></li>
+                        <li><a href="tel:+46701234567">070-123 45 67</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Information</h5>
+                    <ul>
+                        <li><a href="login.html">För verkstäder</a></li>
+                        <li><a href="#">Privatpersoner</a></li>
+                        <li><a href="#">Integritetspolicy</a></li>
+                        <li><a href="#">Användarvillkor</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5>Följ oss</h5>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook">
+                            <i class="icon-facebook" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <i class="icon-twitter" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <i class="icon-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <i class="icon-linkedin" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-				<div class="timeline-content">
-					<p>Betalning</p>
-					<i class="fa-solid fa-cart-shopping"></i>
-				</div>
-
-				<div class="timeline-content">
-					<i class="fa-solid fa-arrow-right"></i>
-				</div>
-
-				<div class="timeline-content">
-					<p>Bekräftelse</p>
-					<i class="fa-solid fa-face-laugh"></i>
-				</div>
-			</div>
-
-			<div class="timeline-bar">
-				<div class="timeline-fill"></div>
-			</div>
-			<!-- Bokningsinformation -->
-			<section class="booking-info">
-				<h1>Bekräfta bokning</h1>
-				<p>
-					<b class="color-primary">Nästan klart!</b> <br />
-					Nu behöver vi bara veta dina kontaktuppgifter och hur du vill betala
-				</p>
-
-				<div class="box-green">
-					<form id="bookingForm">
-						<h2>Kontaktuppgifter:</h2>
-						<label for="workshop">Namn:</label>
-						<input
-							type="text"
-							id="workshop"
-							name="workshop"
-							placeholder="Namn"
-							required
-						/>
-						<label for="address">E-post:</label>
-						<input
-							type="text"
-							id="address"
-							name="address"
-							placeholder="Adress"
-							required
-						/>
-						<label for="Telefon">Telefon:</label>
-						<input
-							type="text"
-							id="Telefon"
-							name="Telefon"
-							placeholder="Telefon"
-							required
-						/>
-
-						<fieldset>
-							<legend>
-								<h2>Hur vill du betala?</h2>
-							</legend>
-
-							<div class="payment-options">
-								<input type="radio" id="payOnSite" name="payment" checked />
-								<label for="payOnSite">På plats</label>
-								<i class="fa-solid fa-location-dot"></i>
-								<input
-									disabled
-									class="disabled"
-									type="radio"
-									id="payByCard"
-									name="payment"
-								/>
-								<label class="text-line-through" for="payByCard"
-									>Med kort</label
-								>
-								<i class="fa-regular fa-credit-card"></i>
-								<input
-									disabled
-									class="disabled"
-									type="radio"
-									id="payBySwish"
-									name="payment"
-								/>
-								<label class="text-line-through" for="payBySwish"
-									>Med Swish</label
-								>
-								<i class="fa-solid fa-mobile-screen-button "></i>
-							</div>
-						</fieldset>
-						<button							
-							class="btn-accent disabled"
-							id="confirmButton"
-							type="button"
-							form="bookingForm"
-						>
-							Bekräfta bokning
-						</button>
-						<button class="btn-primary" type="button" id="backButton">
-							Tillbaka
-						</button>
-					</form>
-				</div>
-			</section>
-		</main>
-		<footer>
-			<div class="footer-container">
-				<div class="footer-contact">
-					<h5>Kontakta oss</h5>
-					<ul>
-						<li>Adressgatan 12</li>
-						<li>123 45 Bilan</li>
-						<li>deackad@mail.com</li>
-						<li>070-123 45 67</li>
-					</ul>
-				</div>
-				<div class="footer-info">
-					<h5>Bra att veta</h5>
-					<ul>
-						<li><a href="/login.html">För dig som har en verkstad</a></li>
-						<li><a href="#">För dig som privatkund</a></li>
-						<li><a href="#">Hur vi behandlar dina personuppgifter</a></li>
-						<li><a href="#">Använd ljust läge</a></li>
-					</ul>
-				</div>
-				<div class="footer-socials">
-					<h5>Följ oss på sociala medier</h5>
-					<div class="social-links">
-						<a href="#"><i class="fab fa-facebook-f"></i></a>
-						<a href="#"><i class="fab fa-twitter"></i></a>
-						<a href="#"><i class="fab fa-instagram"></i></a>
-						<a href="#"><i class="fab fa-linkedin-in"></i></a>
-					</div>
-				</div>
-			</div>
-		</footer>
-	</body>
+    <style>
+        .payment-option input[type="radio"]:checked + label {
+            border-color: var(--primary);
+            background-color: rgba(37, 99, 235, 0.05);
+        }
+    </style>
+</body>
 </html>
