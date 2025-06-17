@@ -1,17 +1,17 @@
 {
   "name": "daeckad",
   "version": "1.0.0",
-  "description": "DÄCKAD - Boka däckbyte enkelt",
-  "main": "index.html",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "python3 -m http.server 3000",
-    "start": "python3 -m http.server 3000",
-    "build": "echo 'Static site - no build needed'",
-    "preview": "python3 -m http.server 4173"
+    "dev": "npx serve -s . -l 3000",
+    "start": "npx serve -s . -l 3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["däckbyte", "bilservice", "verkstad"],
-  "author": "DÄCKAD Team",
-  "license": "MIT",
-  "devDependencies": {},
-  "dependencies": {}
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
 }
