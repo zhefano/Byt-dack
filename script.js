@@ -850,7 +850,14 @@ class DaeckadApp {
             const link = e.target.closest('a[href^="#"]');
             if (link) {
                 e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
+                const href = link.getAttribute('href');
+                
+                // Check if href is just '#' or invalid
+                if (href === '#' || href.length <= 1) {
+                    return;
+                }
+                
+                const target = document.querySelector(href);
                 if (target) {
                     target.scrollIntoView({ behavior: 'smooth' });
                 }
