@@ -13,35 +13,119 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
+    <!-- Modern Dribbble-Inspired Header -->
+    <header class="header-modern">
         <div class="container">
-            <div class="header-content">
-                <img src="/images/dack4.png" alt="DÄCKAD" class="logo" id="logo">
+            <div class="header-content-modern">
+                <!-- Logo Section -->
+                <div class="logo-section">
+                    <img src="/images/dack4.png" alt="DÄCKAD" class="logo-modern" id="logo">
+                    <div class="logo-badge">
+                        <span class="badge-text">VERKSTÄDER</span>
+                    </div>
+                </div>
                 
-                <nav class="nav-menu">
-                    <button class="nav-toggle" id="nav-toggle" aria-label="Öppna meny">
-                        <span></span>
-                        <span></span>
-                        <span></span>
+                <!-- Progress Indicator -->
+                <div class="header-progress">
+                    <div class="progress-step completed">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span class="step-text">Plats</span>
+                    </div>
+                    
+                    <div class="progress-line"></div>
+                    
+                    <div class="progress-step active">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="2"/>
+                                <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="2"/>
+                                <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span class="step-text">Verkstad</span>
+                    </div>
+                    
+                    <div class="progress-line"></div>
+                    
+                    <div class="progress-step">
+                        <div class="step-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <rect x="1" y="3" width="15" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="m16 8l2 2l4-4" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span class="step-text">Bekräfta</span>
+                    </div>
+                </div>
+                
+                <!-- Action Section -->
+                <div class="header-actions">
+                    <button class="back-btn-modern" onclick="history.back()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <span>Tillbaka</span>
                     </button>
                     
-                    <div class="nav-dropdown" id="nav-dropdown">
-                        <a href="#">
-                            <i class="icon-globe" aria-hidden="true"></i>
-                            Change to English
-                        </a>
-                        <a href="login.html">
-                            <i class="icon-wrench" aria-hidden="true"></i>
-                            Logga in som verkstad
-                        </a>
-                        <a href="#" id="theme-toggle">
-                            <i class="icon-moon" aria-hidden="true"></i>
-                            Mörkt tema
-                        </a>
-                    </div>
-                </nav>
+                    <nav class="nav-menu-modern">
+                        <button class="nav-toggle-modern" id="nav-toggle" aria-label="Öppna meny">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        
+                        <div class="nav-dropdown-modern" id="nav-dropdown">
+                            <a href="#" class="nav-item">
+                                <div class="nav-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div class="nav-text">
+                                    <span class="nav-title">English</span>
+                                    <span class="nav-subtitle">Change language</span>
+                                </div>
+                            </a>
+                            
+                            <a href="login.html" class="nav-item">
+                                <div class="nav-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div class="nav-text">
+                                    <span class="nav-title">Verkstad</span>
+                                    <span class="nav-subtitle">Logga in</span>
+                                </div>
+                            </a>
+                            
+                            <a href="#" id="theme-toggle" class="nav-item">
+                                <div class="nav-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <div class="nav-text">
+                                    <span class="nav-title">Mörkt tema</span>
+                                    <span class="nav-subtitle">Växla utseende</span>
+                                </div>
+                            </a>
+                        </div>
+                    </nav>
+                </div>
             </div>
+        </div>
+        
+        <!-- Header Background Effects -->
+        <div class="header-bg-effects">
+            <div class="bg-blur"></div>
+            <div class="bg-gradient-overlay"></div>
         </div>
     </header>
 
