@@ -558,6 +558,8 @@ p {
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary-light) 0%, transparent 100%);
   border: 2px solid rgba(239, 68, 68, 0.1);
+  cursor: pointer;
+  pointer-events: auto;
 }
 
 .tire-inner {
@@ -645,6 +647,12 @@ p {
 @keyframes shape-float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-25px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 /* Hero Content */
@@ -1255,6 +1263,11 @@ p {
 
 .form-input::placeholder {
   color: var(--text-secondary);
+}
+
+.form-input.error {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 /* Cards */

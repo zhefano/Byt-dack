@@ -2,8 +2,7 @@
 
 // Configuration
 const CONFIG = {
-    API_URL: "https://api.jsonbin.io/v3/b/66fd147ead19ca34f8b16ee2",
-    API_KEY: "$2a$10$y4mPQYiiUu74u2sIyOEiWO85nKLstQ8LQ0ZhqDNGMzTofL.vJfCm6",
+    API_URL: "data.json", // Use local data file
     STATIONS_PER_PAGE: 10,
     STORAGE_KEYS: {
         STATIONS: 'daeckad_stations',
@@ -115,23 +114,48 @@ const utils = {
 const apiService = {
     async fetchStations() {
         try {
-            const response = await fetch(CONFIG.API_URL, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Access-Key': CONFIG.API_KEY
-                }
-            });
+            const response = await fetch(CONFIG.API_URL);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
             const data = await response.json();
-            return data.record.stations;
+            return data.stations;
         } catch (error) {
             console.error('Error fetching stations:', error);
-            throw error;
+            // Return fallback data if API fails
+            return this.getFallbackStations();
         }
+    },
+
+    getFallbackStations() {
+        return [
+            {
+                id: "1",
+                name: "Västerås Auto Experts",
+                address: "23 Erikslundsgatan, Västerås, SE",
+                latitude: 59.621,
+                longitude: 16.5405,
+                phone: "+46 21 555 0101",
+                website: "http://vasterasautoexperts.se",
+                price: 240,
+                description: "Det här är en kort beskrivning på verkstaden.",
+                image: "https://picsum.photos/200"
+            },
+            {
+                id: "2",
+                name: "Mälaren Car Services",
+                address: "5 Köpmangatan, Västerås, SE",
+                latitude: 59.618,
+                longitude: 16.5545,
+                phone: "+46 21 555 0102",
+                website: "http://malarencarservices.se",
+                price: 460,
+                description: "Det här är en kort beskrivning på verkstaden.",
+                image: "https://picsum.photos/200"
+            }
+        ];
     }
 };
 
@@ -172,7 +196,7 @@ const locationService = {
             return `${city}${street ? ', ' + street : ''}`;
         } catch (error) {
             console.error('Error getting address:', error);
-            return null;
+            return 'Västerås'; // Fallback
         }
     }
 };
@@ -419,12 +443,20 @@ const pageControllers = {
                         btnMain.textContent = 'PLATS EJ TILLGÄNGLIG';
                     }
                     
+                    // Set fallback location (Västerås center)
+                    const fallbackLocation = {
+                        latitude: 59.6162,
+                        longitude: 16.5528
+                    };
+                    utils.storage.set(CONFIG.STORAGE_KEYS.USER_LOCATION, fallbackLocation);
+                    
                     setTimeout(() => {
                         locationBlast.style.borderColor = '';
                         if (btnMain) {
                             btnMain.textContent = 'HITTA VERKSTÄDER';
                         }
-                    }, 3000);
+                        window.location.href = '/Resultatsida.html';
+                    }, 2000);
                 } finally {
                     utils.hideLoading(locationBlast);
                 }
@@ -436,6 +468,13 @@ const pageControllers = {
             const handleSearch = () => {
                 const searchValue = locationInput.value.trim();
                 if (searchValue) {
+                    // Set fallback location for manual search
+                    const fallbackLocation = {
+                        latitude: 59.6162,
+                        longitude: 16.5528
+                    };
+                    utils.storage.set(CONFIG.STORAGE_KEYS.USER_LOCATION, fallbackLocation);
+                    
                     // Dribbble-style button feedback
                     goButton.style.transform = 'scale(1.1)';
                     
@@ -443,6 +482,12 @@ const pageControllers = {
                         goButton.style.transform = '';
                         window.location.href = '/Resultatsida.html';
                     }, 300);
+                } else {
+                    // Shake animation for empty input
+                    locationInput.style.animation = 'shake 0.5s ease-in-out';
+                    setTimeout(() => {
+                        locationInput.style.animation = '';
+                    }, 500);
                 }
             };
 
@@ -486,12 +531,15 @@ const pageControllers = {
     async initResultsPage() {
         await stationService.initializeStations();
         
-        const userLocation = utils.storage.get(CONFIG.STORAGE_KEYS.USER_LOCATION);
+        let userLocation = utils.storage.get(CONFIG.STORAGE_KEYS.USER_LOCATION);
         
         if (!userLocation) {
-            // Redirect back to home if no location
-            window.location.href = '/index.html';
-            return;
+            // Set fallback location if none exists
+            userLocation = {
+                latitude: 59.6162,
+                longitude: 16.5528
+            };
+            utils.storage.set(CONFIG.STORAGE_KEYS.USER_LOCATION, userLocation);
         }
 
         this.displayStations();
@@ -600,6 +648,14 @@ const pageControllers = {
         }
         if (elements.price) elements.price.textContent = `${station.price}:-`;
         if (elements.description) elements.description.textContent = station.description;
+
+        // Set minimum date to today
+        const dateInput = document.getElementById('booking-date');
+        if (dateInput) {
+            const today = new Date().toISOString().split('T')[0];
+            dateInput.min = today;
+            dateInput.value = today;
+        }
 
         // Store selected station
         utils.storage.set(CONFIG.STORAGE_KEYS.SELECTED_STATION, station);
