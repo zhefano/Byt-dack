@@ -53,80 +53,131 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Hero Section -->
-        <section class="search-section">
+        <!-- Revolutionary Hero Section -->
+        <section class="hero-revolution">
+            <div class="tire-animation">
+                <div class="tire tire-1"></div>
+                <div class="tire tire-2"></div>
+                <div class="tire tire-3"></div>
+                <div class="tire tire-4"></div>
+            </div>
+            
             <div class="container">
-                <div class="hero-content">
-                    <h1 class="hero-title">Dags att byta däck?</h1>
-                    <p class="hero-subtitle">Vi hittar den bästa verkstaden åt dig - jämför priser och boka direkt</p>
+                <div class="hero-blast">
+                    <div class="impact-text">
+                        <h1 class="hero-shout">
+                            <span class="word-1">DÄCK</span>
+                            <span class="word-2">KRIS?</span>
+                        </h1>
+                        <div class="hero-punch">
+                            <span class="punch-line">VI LÖSER DET</span>
+                            <span class="punch-sub">på 2 minuter</span>
+                        </div>
+                    </div>
                     
-                    <div class="search-container">
-                        <form class="search-form" id="search-form" role="search">
-                            <div class="search-actions">
-                                <button type="button" class="location-btn" id="location-btn">
-                                    <i class="icon-location" aria-hidden="true"></i>
-                                    Använd min plats
-                                </button>
-                                
-                                <div class="search-divider">
-                                    <span>eller</span>
-                                </div>
-                                
-                                <div class="search-input-group">
-                                    <label for="search-input" class="sr-only">Sök efter ort eller adress</label>
-                                    <input 
-                                        type="search" 
-                                        id="search-input" 
-                                        class="search-input" 
-                                        placeholder="Skriv in en ort eller adress"
-                                        autocomplete="address-line1"
-                                    >
-                                    <button type="submit" class="search-btn">
-                                        Sök verkstäder
-                                    </button>
-                                </div>
+                    <div class="action-zone">
+                        <div class="location-blast" id="location-blast">
+                            <div class="blast-icon">📍</div>
+                            <div class="blast-text">
+                                <span class="blast-main">HITTA VERKSTÄDER</span>
+                                <span class="blast-sub">använd din plats</span>
                             </div>
-                        </form>
+                            <div class="blast-arrow">→</div>
+                        </div>
+                        
+                        <div class="or-divider">
+                            <span>ELLER</span>
+                        </div>
+                        
+                        <div class="manual-zone">
+                            <input 
+                                type="text" 
+                                id="location-input" 
+                                class="location-input" 
+                                placeholder="Skriv din stad..."
+                            >
+                            <button class="go-button" id="go-button">
+                                <span>SÖK</span>
+                                <div class="button-spark"></div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="trust-indicators">
+                        <div class="indicator">
+                            <span class="number">30+</span>
+                            <span class="label">VERKSTÄDER</span>
+                        </div>
+                        <div class="indicator">
+                            <span class="number">210kr</span>
+                            <span class="label">FRÅN</span>
+                        </div>
+                        <div class="indicator">
+                            <span class="number">2min</span>
+                            <span class="label">BOKNING</span>
+                        </div>
                     </div>
                 </div>
             </div>
+            
+            <div class="hero-bg-pattern"></div>
         </section>
 
-        <!-- How it Works -->
-        <section class="section">
+        <!-- How it Works - Reimagined -->
+        <section class="process-revolution">
             <div class="container">
-                <h2 class="text-center mb-8">Så här fungerar det</h2>
+                <h2 class="process-title">SÅ ENKELT ÄR DET</h2>
                 
-                <div class="timeline">
-                    <div class="timeline-step active">
-                        <div class="timeline-icon">
-                            <i class="icon-search" aria-hidden="true"></i>
+                <div class="process-flow">
+                    <div class="flow-step step-1">
+                        <div class="step-visual">
+                            <div class="step-icon">🎯</div>
+                            <div class="step-pulse"></div>
                         </div>
-                        <span class="timeline-text">Ange din plats</span>
+                        <div class="step-content">
+                            <h3>PEKA</h3>
+                            <p>Din plats</p>
+                        </div>
                     </div>
                     
-                    <div class="timeline-connector"></div>
-                    
-                    <div class="timeline-step">
-                        <div class="timeline-icon">
-                            <i class="icon-calendar" aria-hidden="true"></i>
-                        </div>
-                        <span class="timeline-text">Välj verkstad & tid</span>
+                    <div class="flow-arrow">
+                        <div class="arrow-line"></div>
+                        <div class="arrow-head"></div>
                     </div>
                     
-                    <div class="timeline-connector"></div>
-                    
-                    <div class="timeline-step">
-                        <div class="timeline-icon">
-                            <i class="icon-check" aria-hidden="true"></i>
+                    <div class="flow-step step-2">
+                        <div class="step-visual">
+                            <div class="step-icon">⚡</div>
+                            <div class="step-pulse"></div>
                         </div>
-                        <span class="timeline-text">Bekräfta bokning</span>
+                        <div class="step-content">
+                            <h3>VÄLJ</h3>
+                            <p>Verkstad & tid</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flow-arrow">
+                        <div class="arrow-line"></div>
+                        <div class="arrow-head"></div>
+                    </div>
+                    
+                    <div class="flow-step step-3">
+                        <div class="step-visual">
+                            <div class="step-icon">🚀</div>
+                            <div class="step-pulse"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3>KLART</h3>
+                            <p>Bekräftat!</p>
+                        </div>
                     </div>
                 </div>
                 
-                <p class="text-center text-lg">
-                    Jämför priser och avstånd bland alla registrerade verkstäder och välj den som passar dig bäst!
-                </p>
+                <div class="process-footer">
+                    <p class="process-promise">
+                        <strong>LÖFTE:</strong> Inga dolda avgifter. Inga krångel. Bara snabba däckbyten.
+                    </p>
+                </div>
             </div>
         </section>
     </main>

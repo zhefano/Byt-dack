@@ -1,4 +1,4 @@
-// DÄCKAD - Minimalistic Performance-First JavaScript
+// DÄCKAD - Revolutionary Performance-First JavaScript
 
 // Configuration
 const CONFIG = {
@@ -334,52 +334,104 @@ const ui = {
 
 // Page Controllers
 const pageControllers = {
-    // Home Page
+    // Home Page - Revolutionary Edition
     initHomePage() {
-        const locationBtn = document.getElementById('location-btn');
-        const searchForm = document.getElementById('search-form');
+        const locationBlast = document.getElementById('location-blast');
+        const locationInput = document.getElementById('location-input');
+        const goButton = document.getElementById('go-button');
 
-        if (locationBtn) {
-            locationBtn.addEventListener('click', async () => {
-                utils.showLoading(locationBtn);
+        // Revolutionary location blast button
+        if (locationBlast) {
+            locationBlast.addEventListener('click', async () => {
+                utils.showLoading(locationBlast);
                 
                 try {
                     const location = await locationService.getCurrentPosition();
                     utils.storage.set(CONFIG.STORAGE_KEYS.USER_LOCATION, location);
                     
-                    // Update search input with address
+                    // Add explosive feedback
+                    locationBlast.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        locationBlast.style.transform = '';
+                    }, 200);
+                    
+                    // Update input with address
                     const address = await locationService.getAddressFromCoordinates(
                         location.latitude, 
                         location.longitude
                     );
                     
-                    const searchInput = document.getElementById('search-input');
-                    if (searchInput && address) {
-                        searchInput.placeholder = address;
+                    if (locationInput && address) {
+                        locationInput.placeholder = address;
+                        locationInput.value = address;
                     }
                     
-                    // Redirect to results
-                    window.location.href = '/Resultatsida.html';
+                    // Explosive redirect
+                    setTimeout(() => {
+                        window.location.href = '/Resultatsida.html';
+                    }, 500);
                 } catch (error) {
                     console.error('Location error:', error);
-                    alert('Kunde inte hämta din plats. Försök igen eller ange adress manuellt.');
+                    // Show revolutionary error message
+                    locationBlast.style.background = 'linear-gradient(135deg, #ff3333 0%, #ff6666 100%)';
+                    locationBlast.querySelector('.blast-main').textContent = 'PLATS EJ TILLGÄNGLIG';
+                    locationBlast.querySelector('.blast-sub').textContent = 'försök manuellt';
+                    
+                    setTimeout(() => {
+                        locationBlast.style.background = '';
+                        locationBlast.querySelector('.blast-main').textContent = 'HITTA VERKSTÄDER';
+                        locationBlast.querySelector('.blast-sub').textContent = 'använd din plats';
+                    }, 3000);
                 } finally {
-                    utils.hideLoading(locationBtn);
+                    utils.hideLoading(locationBlast);
                 }
             });
         }
 
-        if (searchForm) {
-            searchForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const searchInput = document.getElementById('search-input');
-                if (searchInput && searchInput.value.trim()) {
-                    // For now, just redirect to results
-                    // In a real app, you'd geocode the address first
-                    window.location.href = '/Resultatsida.html';
+        // Manual search with explosive feedback
+        if (goButton && locationInput) {
+            const handleSearch = () => {
+                const searchValue = locationInput.value.trim();
+                if (searchValue) {
+                    // Explosive button feedback
+                    goButton.style.transform = 'scale(1.1)';
+                    goButton.querySelector('.button-spark').style.left = '100%';
+                    
+                    setTimeout(() => {
+                        goButton.style.transform = '';
+                        window.location.href = '/Resultatsida.html';
+                    }, 300);
+                }
+            };
+
+            goButton.addEventListener('click', handleSearch);
+            
+            locationInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    handleSearch();
                 }
             });
+
+            // Revolutionary input feedback
+            locationInput.addEventListener('focus', () => {
+                locationInput.parentElement.style.transform = 'scale(1.02)';
+            });
+
+            locationInput.addEventListener('blur', () => {
+                locationInput.parentElement.style.transform = '';
+            });
         }
+
+        // Add revolutionary tire animation interaction
+        const tires = document.querySelectorAll('.tire');
+        tires.forEach((tire, index) => {
+            tire.addEventListener('click', () => {
+                tire.style.animationDuration = '0.5s';
+                setTimeout(() => {
+                    tire.style.animationDuration = '';
+                }, 2000);
+            });
+        });
     },
 
     // Results Page
@@ -700,7 +752,7 @@ const pageControllers = {
     }
 };
 
-// Main Application
+// Main Application - Revolutionary Edition
 class DaeckadApp {
     constructor() {
         this.currentPage = this.getCurrentPage();
@@ -740,11 +792,11 @@ class DaeckadApp {
             console.error('Error initializing page:', error);
         }
 
-        // Initialize common features
-        this.initCommonFeatures();
+        // Initialize revolutionary features
+        this.initRevolutionaryFeatures();
     }
 
-    initCommonFeatures() {
+    initRevolutionaryFeatures() {
         // Keyboard navigation improvements
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
@@ -757,17 +809,29 @@ class DaeckadApp {
             }
         });
 
-        // Performance monitoring
+        // Revolutionary performance monitoring
         if ('performance' in window) {
             window.addEventListener('load', () => {
                 const loadTime = performance.now();
-                console.log(`Page loaded in ${loadTime.toFixed(2)}ms`);
+                console.log(`🚀 DÄCKAD loaded in ${loadTime.toFixed(2)}ms - REVOLUTIONARY SPEED!`);
             });
         }
+
+        // Add revolutionary easter eggs
+        let clickCount = 0;
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tire')) {
+                clickCount++;
+                if (clickCount === 5) {
+                    console.log('🔥 REVOLUTIONARY TIRE MASTER DISCOVERED! 🔥');
+                    clickCount = 0;
+                }
+            }
+        });
     }
 }
 
-// Initialize app when DOM is ready
+// Initialize revolutionary app when DOM is ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => new DaeckadApp());
 } else {
